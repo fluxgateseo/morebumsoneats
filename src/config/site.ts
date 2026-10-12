@@ -13,11 +13,8 @@ export const site = {
   description:
     'Restaurant marketing agency helping restaurants, bars and dining venues fill more tables with tailored campaigns that boost bookings and revenue.',
   themeColor: '#1466F5',
-  // TODO: replace placeholder contact details with the real ones.
   contact: {
     email: 'hello@morebumsonseats.com',
-    phone: '+123456789',
-    phoneDisplay: '+1 234 567 89',
   },
   social: {
     facebook: 'https://facebook.com/',

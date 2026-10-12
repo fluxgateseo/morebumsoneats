@@ -39,21 +39,12 @@ const jsonLd = graph(
 
       <aside class="contact__aside" data-reveal style="--reveal-delay: 0.1s">
         <div class="card card--lime">
-          <h2 class="card__title">Prefer a direct line?</h2>
-          <ul role="list" class="stack">
-            <li>
-              <a href={`mailto:${site.contact.email}`} class="card__link">
-                <Icon name="mail" />
-                {site.contact.email}
-              </a>
-            </li>
-            <li>
-              <a href={`tel:${site.contact.phone}`} class="card__link">
-                <Icon name="phone" />
-                {site.contact.phoneDisplay}
-              </a>
-            </li>
-          </ul>
+          <h2 class="card__title">Prefer email?</h2>
+          <p>Drop us a line and tell us about your venue.</p>
+          <a href={`mailto:${site.contact.email}`} class="card__link">
+            <Icon name="mail" />
+            {site.contact.email}
+          </a>
         </div>
         <div class="card card--photo">
           <UnsplashImage image={images.coffee} width={560} height={420} sizes="(max-width: 860px) 100vw, 35vw" />

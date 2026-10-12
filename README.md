@@ -117,7 +117,7 @@ For local testing, put the variable in a `.dev.vars` file (git-ignored) and run 
 
 Some details from the old site were placeholders. Update them in one place each:
 
-- [ ] Email & phone — `src/config/site.ts`
+- [ ] Contact email — `src/config/site.ts`
 - [ ] Social profile URLs — `src/config/site.ts`
 - [ ] Testimonial names and venues — `src/data/testimonials.ts`
 - [ ] Set `LEADS_WEBHOOK_URL` in Cloudflare
