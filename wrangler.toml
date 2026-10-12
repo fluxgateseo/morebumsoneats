@@ -1,0 +1,8 @@
+# Cloudflare Pages configuration
+# https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+name = "morebumsonseats"
+pages_build_output_dir = "./dist"
+compatibility_date = "2026-10-01"
+
+# Secrets (set in the dashboard or with `wrangler pages secret put`):
+#   LEADS_WEBHOOK_URL — endpoint that receives contact/newsletter leads as JSON

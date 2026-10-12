@@ -2,16 +2,16 @@
   "name": "morebumsonseats",
   "version": "1.0.0",
   "private": true,
-  "description": "Marketing website for More Bums on Seats — restaurant & hospitality marketing.",
+  "description": "Marketing website for More Bums on Seats \u2014 restaurant & hospitality marketing.",
   "type": "module",
   "engines": {
     "node": ">=22"
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build",
-    "preview": "wrangler pages dev ./dist",
-    "check": "astro check",
+    "build": "npm run check && astro build",
+    "preview": "astro build && wrangler pages dev ./dist",
+    "check": "astro check && tsc -p functions/tsconfig.json",
     "deploy": "npm run build && wrangler pages deploy ./dist"
   },
   "dependencies": {
