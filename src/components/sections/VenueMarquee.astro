@@ -1,0 +1,56 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { venueTypes } from '@/data/highlights';
+
+// Duplicated once so the CSS loop is seamless.
+const items = [...venueTypes, ...venueTypes];
+---
+
+<section class="marquee" aria-label="Venues we work with">
+  <ul role="list" class="marquee__track">
+    {
+      items.map((venue, i) => (
+        <li class="marquee__item" aria-hidden={i >= venueTypes.length ? 'true' : undefined}>
+          <Icon name="utensils" size={18} />
+          {venue}
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .marquee {
+    overflow: hidden;
+    padding-block: var(--space-lg);
+    mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    gap: var(--space-2xl);
+    animation: scroll 40s linear infinite;
+  }
+
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+
+  .marquee__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-size: var(--fs-lg);
+    font-weight: 700;
+    color: var(--c-muted);
+    white-space: nowrap;
+  }
+
+  @keyframes scroll {
+    to {
+      transform: translateX(calc(-50% - var(--space-2xl) / 2));
+    }
+  }
+</style>

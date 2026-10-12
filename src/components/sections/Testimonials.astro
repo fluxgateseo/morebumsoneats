@@ -1,0 +1,106 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import UnsplashImage from '@/components/ui/UnsplashImage.astro';
+import { testimonials } from '@/data/testimonials';
+
+export interface Props {
+  limit?: number;
+}
+
+const { limit = 3 } = Astro.props;
+const items = testimonials.slice(0, limit);
+const tones = ['sky', 'lime', 'tomato', 'pink'];
+---
+
+<section class="section" aria-labelledby="testimonials-title">
+  <div class="container">
+    <SectionHeading eyebrow="What clients say" title="Slow nights, <em>sorted</em>" align="center" />
+    <ul role="list" class="quotes">
+      {
+        items.map((t, i) => (
+          <li class:list={['quote', `quote--${tones[i % tones.length]}`]} data-reveal style={`--reveal-delay:${i * 0.1}s`}>
+            <figure>
+              <blockquote>
+                <p>“{t.quote}”</p>
+              </blockquote>
+              <figcaption class="quote__author">
+                <UnsplashImage image={t.avatar} width={96} height={96} sizes="48px" widths={[96]} alt="" />
+                <span>
+                  <strong>{t.name}</strong>
+                  <span class="quote__role">{t.role}</span>
+                </span>
+              </figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .quotes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: var(--space-md);
+  }
+
+  .quote {
+    padding: var(--space-xl) var(--space-lg) var(--space-lg);
+    border-radius: var(--radius-lg);
+  }
+
+  .quote figure {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-xl);
+    height: 100%;
+  }
+
+  .quote blockquote {
+    font-family: var(--font-display);
+    font-size: var(--fs-xl);
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+  }
+
+  .quote--sky {
+    background: var(--c-sky);
+    color: var(--c-paper);
+  }
+  .quote--lime {
+    background: var(--c-lime);
+  }
+  .quote--tomato {
+    background: var(--c-tomato);
+    color: var(--c-paper);
+  }
+  .quote--pink {
+    background: var(--c-pink);
+  }
+
+  .quote__author {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--fs-sm);
+  }
+
+  .quote__author :global(img) {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid currentColor;
+  }
+
+  .quote__author > span {
+    display: grid;
+  }
+
+  .quote__role {
+    opacity: 0.8;
+  }
+</style>

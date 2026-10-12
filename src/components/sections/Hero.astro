@@ -1,0 +1,387 @@
+---
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import UnsplashImage from '@/components/ui/UnsplashImage.astro';
+import { images } from '@/data/images';
+
+/** Floating "deck" of cards — decorative, so hidden from assistive tech. */
+const cards = [
+  { kind: 'photo', image: images.pancakes, chip: 'Brunch' },
+  { kind: 'bars' },
+  { kind: 'photo', image: images.burger, chip: 'Friday · Fully booked' },
+  { kind: 'chart' },
+  { kind: 'statement' },
+  { kind: 'booking' },
+  { kind: 'photo', image: images.cocktails, chip: 'Event night · Sold out' },
+  { kind: 'reach' },
+  { kind: 'photo', image: images.woodfiredPizza, chip: 'Pizza Tuesday' },
+] as const;
+
+const center = (cards.length - 1) / 2;
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__sky" aria-hidden="true"></div>
+
+  <div class="hero__content container">
+    <p class="eyebrow hero__eyebrow">Restaurant &amp; hospitality marketing</p>
+    <h1 id="hero-title" class="hero__title">
+      Fill more tables.<br /><span>Grow your revenue.</span>
+    </h1>
+    <p class="hero__lead">
+      Smart, tailored marketing for restaurants, bars and dining venues — campaigns that turn quiet
+      nights into fully booked evenings.
+    </p>
+    <div class="hero__actions">
+      <Button href="/services/" variant="glass">Our services</Button>
+      <Button href="/contact/" withArrow>Get a free audit</Button>
+    </div>
+  </div>
+
+  <div class="deck" aria-hidden="true">
+    {
+      cards.map((card, i) => {
+        const offset = i - center;
+        const style = `--o:${offset};--a:${Math.abs(offset)}`;
+        return (
+          <div class:list={['deck__card', `deck__card--${card.kind}`]} style={style}>
+            {card.kind === 'photo' && (
+              <>
+                <UnsplashImage image={card.image} width={240} height={300} sizes="180px" widths={[240, 480]} loading="eager" />
+                <span class="deck__chip">{card.chip}</span>
+              </>
+            )}
+            {card.kind === 'bars' && (
+              <>
+                <p class="deck__label">Bookings this week</p>
+                <div class="deck__bars">
+                  {[38, 52, 46, 70, 88, 100, 76].map((h) => (
+                    <span style={`--h:${h}%`} />
+                  ))}
+                </div>
+                <p class="deck__days">M T W T F S S</p>
+              </>
+            )}
+            {card.kind === 'chart' && (
+              <>
+                <p class="deck__label">Covers per night</p>
+                <svg viewBox="0 0 160 80" class="deck__chart">
+                  <defs>
+                    <linearGradient id="area" x1="0" x2="0" y1="0" y2="1">
+                      <stop offset="0" stop-color="#63b4ff" stop-opacity="0.7" />
+                      <stop offset="1" stop-color="#63b4ff" stop-opacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M0 70 L20 62 L40 64 L60 50 L80 52 L100 34 L120 38 L140 18 L160 10 V80 H0Z" fill="url(#area)" />
+                  <path d="M0 70 L20 62 L40 64 L60 50 L80 52 L100 34 L120 38 L140 18 L160 10" fill="none" stroke="#1466f5" stroke-width="2.5" />
+                </svg>
+              </>
+            )}
+            {card.kind === 'statement' && (
+              <p class="deck__statement">
+                Marketing that <span class="dot" /> combines <b>local</b>, <b>social</b> and <b>events</b> to fill seats
+              </p>
+            )}
+            {card.kind === 'booking' && (
+              <>
+                <span class="deck__plus">
+                  <Icon name="plus" size={18} />
+                </span>
+                <p class="deck__booking">New reservation</p>
+                <p class="deck__sub">Table for 4 · 8:00pm</p>
+              </>
+            )}
+            {card.kind === 'reach' && (
+              <>
+                <p class="deck__label">Instagram reach</p>
+                <p class="deck__big">
+                  <Icon name="arrow-up-right" size={18} /> Growing
+                </p>
+                <ul class="deck__list">
+                  <li>Reels</li>
+                  <li>Stories</li>
+                  <li>Collabs</li>
+                </ul>
+              </>
+            )}
+          </div>
+        );
+      })
+    }
+  </div>
+
+  <p class="hero__note">Built for restaurants · bars · cafés · event venues</p>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    margin: 0.5rem;
+    padding-top: clamp(7rem, 12vw, 9.5rem);
+    padding-bottom: var(--space-xl);
+    border-radius: var(--radius-xl);
+    color: var(--c-paper);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Sky gradient + soft clouds */
+  .hero__sky {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(60% 40% at 15% 100%, rgb(255 255 255 / 0.95), transparent 70%),
+      radial-gradient(45% 30% at 55% 105%, rgb(255 255 255 / 0.9), transparent 70%),
+      radial-gradient(50% 35% at 95% 95%, rgb(255 255 255 / 0.85), transparent 70%),
+      radial-gradient(30% 18% at 80% 62%, rgb(255 255 255 / 0.35), transparent 70%),
+      radial-gradient(28% 14% at 8% 55%, rgb(255 255 255 / 0.4), transparent 70%),
+      linear-gradient(180deg, var(--c-sky-700) 0%, var(--c-sky) 40%, var(--c-sky-300) 78%, var(--c-sky-100) 100%);
+  }
+
+  .hero__content {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    gap: var(--space-lg);
+  }
+
+  .hero__eyebrow {
+    padding: 0.4rem 0.9rem;
+    border-radius: var(--radius-pill);
+    background: rgb(255 255 255 / 0.15);
+    backdrop-filter: blur(6px);
+  }
+
+  .hero__title {
+    font-size: var(--fs-4xl);
+    font-weight: 600;
+  }
+
+  .hero__title span {
+    color: var(--c-lime);
+  }
+
+  .hero__lead {
+    max-width: 52ch;
+    color: rgb(255 255 255 / 0.88);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-sm);
+  }
+
+  /* ---------- Card deck ---------- */
+  .deck {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(0.4rem, 1vw, 1rem);
+    margin-top: clamp(2.5rem, 6vw, 4.5rem);
+    perspective: 1100px;
+    min-height: 240px;
+  }
+
+  .deck__card {
+    --w: clamp(120px, 12vw, 170px);
+    position: relative;
+    flex-shrink: 0;
+    width: var(--w);
+    height: calc(var(--w) * 1.2);
+    padding: 0.8rem;
+    border-radius: var(--radius-md);
+    background: var(--c-paper);
+    color: var(--c-ink);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(calc(var(--a) * -6px)) rotateY(calc(var(--o) * -9deg))
+      scale(calc(1 - var(--a) * 0.07));
+    animation: float 6s ease-in-out infinite;
+    animation-delay: calc(var(--o) * 0.4s);
+    overflow: hidden;
+    font-size: 0.7rem;
+  }
+
+  @keyframes float {
+    50% {
+      translate: 0 -10px;
+    }
+  }
+
+  .deck__card--photo {
+    padding: 0;
+  }
+
+  .deck__card--photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .deck__chip {
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    padding: 0.35rem 0.55rem;
+    border-radius: var(--radius-pill);
+    background: rgb(255 255 255 / 0.92);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .deck__label {
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .deck__bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 60%;
+    margin-top: 0.6rem;
+  }
+
+  .deck__bars span {
+    flex: 1;
+    height: var(--h);
+    border-radius: 4px;
+    background: linear-gradient(var(--c-lime), var(--c-lime-600));
+  }
+
+  .deck__days {
+    margin-top: 0.3rem;
+    letter-spacing: 0.35em;
+    color: var(--c-muted);
+    font-size: 0.6rem;
+  }
+
+  .deck__chart {
+    margin-top: 0.8rem;
+    width: 100%;
+  }
+
+  .deck__card--statement {
+    background: var(--c-ink);
+    color: var(--c-paper);
+    border: 2px solid rgb(255 255 255 / 0.6);
+  }
+
+  .deck__statement {
+    font-family: var(--font-display);
+    font-size: clamp(0.8rem, 1.1vw, 1rem);
+    line-height: 1.25;
+    color: rgb(255 255 255 / 0.7);
+  }
+
+  .deck__statement b {
+    color: var(--c-paper);
+  }
+
+  .dot {
+    display: inline-block;
+    width: 0.7em;
+    height: 0.7em;
+    border-radius: 50%;
+    background: var(--c-lime);
+  }
+
+  .deck__card--booking {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.3rem;
+    background: rgb(255 255 255 / 0.18);
+    border: 1px solid rgb(255 255 255 / 0.45);
+    color: var(--c-paper);
+    backdrop-filter: blur(10px);
+    text-align: center;
+  }
+
+  .deck__plus {
+    display: grid;
+    place-items: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    background: var(--c-paper);
+    color: var(--c-sky);
+  }
+
+  .deck__booking {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .deck__sub {
+    opacity: 0.8;
+  }
+
+  .deck__big {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    margin-block: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--c-tomato);
+  }
+
+  .deck__list {
+    display: grid;
+    gap: 0.3rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .deck__list li {
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    background: var(--c-cloud);
+  }
+
+  .hero__note {
+    margin-top: var(--space-xl);
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.08em;
+    color: var(--c-ink-soft);
+  }
+
+  @media (max-width: 1100px) {
+    .deck__card:nth-child(1),
+    .deck__card:nth-child(9) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .deck__card:nth-child(2),
+    .deck__card:nth-child(8) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .deck {
+      gap: 0.4rem;
+    }
+
+    .deck__card {
+      --w: 30vw;
+    }
+
+    .deck__card:nth-child(3),
+    .deck__card:nth-child(7) {
+      display: none;
+    }
+  }
+</style>

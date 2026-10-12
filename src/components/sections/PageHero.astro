@@ -1,0 +1,146 @@
+---
+/** Colourful hero used at the top of inner pages, with visible breadcrumbs. */
+import type { SiteImage } from '@/data/images';
+import UnsplashImage from '@/components/ui/UnsplashImage.astro';
+
+export interface Props {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  image?: SiteImage;
+  tone?: 'sky' | 'tomato' | 'ink' | 'pink';
+}
+
+const { eyebrow, title, lead, image, tone = 'sky' } = Astro.props;
+---
+
+<section class:list={['page-hero', `page-hero--${tone}`]} aria-labelledby="page-title">
+  <div class="container page-hero__grid">
+    <div class="page-hero__copy">
+      <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol role="list">
+          <li><a href="/">Home</a></li>
+          <li aria-current="page">{eyebrow}</li>
+        </ol>
+      </nav>
+      <h1 id="page-title" class="page-hero__title" set:html={title} />
+      {lead && <p class="page-hero__lead">{lead}</p>}
+      <slot />
+    </div>
+    {
+      image && (
+        <div class="page-hero__media">
+          <UnsplashImage
+            image={image}
+            width={720}
+            height={560}
+            sizes="(max-width: 860px) 100vw, 45vw"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    margin: 0.5rem;
+    padding-top: clamp(7rem, 12vw, 9rem);
+    padding-bottom: var(--space-2xl);
+    border-radius: var(--radius-xl);
+    color: var(--c-paper);
+    overflow: hidden;
+  }
+
+  .page-hero--sky {
+    background:
+      radial-gradient(50% 40% at 10% 110%, rgb(255 255 255 / 0.6), transparent 70%),
+      linear-gradient(160deg, var(--c-sky-700), var(--c-sky) 50%, var(--c-sky-300));
+  }
+
+  .page-hero--tomato {
+    background: radial-gradient(circle at 85% 15%, var(--c-sun), transparent 45%), var(--c-tomato);
+  }
+
+  .page-hero--pink {
+    background: radial-gradient(circle at 85% 15%, var(--c-lime), transparent 40%), var(--c-pink);
+    color: var(--c-ink);
+  }
+
+  .page-hero--ink {
+    background: radial-gradient(circle at 85% 15%, var(--c-sky), transparent 45%), var(--c-ink);
+  }
+
+  .page-hero__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  .page-hero__grid:not(:has(.page-hero__media)) {
+    grid-template-columns: 1fr;
+  }
+
+  .page-hero__copy {
+    display: grid;
+    gap: var(--space-lg);
+    justify-items: start;
+  }
+
+  .breadcrumb ol {
+    display: flex;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .breadcrumb li + li::before {
+    content: '/';
+    margin-right: 0.5rem;
+    opacity: 0.6;
+  }
+
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
+  .page-hero__title {
+    font-size: var(--fs-4xl);
+    font-weight: 600;
+  }
+
+  .page-hero__title :global(span) {
+    color: var(--c-lime);
+  }
+
+  .page-hero--pink .page-hero__title :global(span) {
+    color: var(--c-paper);
+  }
+
+  .page-hero__lead {
+    max-width: 52ch;
+    font-size: var(--fs-lg);
+    opacity: 0.9;
+  }
+
+  .page-hero__media :global(img) {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    border: 6px solid rgb(255 255 255 / 0.85);
+    box-shadow: var(--shadow-lg);
+    aspect-ratio: 72 / 56;
+    object-fit: cover;
+    rotate: 2deg;
+  }
+
+  @media (max-width: 860px) {
+    .page-hero__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

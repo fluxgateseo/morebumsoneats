@@ -1,0 +1,191 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import UnsplashImage from '@/components/ui/UnsplashImage.astro';
+import { images } from '@/data/images';
+import { testimonials } from '@/data/testimonials';
+
+const avatars = [images.portraitA, images.portraitB, images.portraitC, images.portraitD];
+const featured = testimonials[0];
+---
+
+<section class="bento-section" aria-label="Results at a glance">
+  <div class="container bento">
+    <article class="tile tile--photo" data-reveal>
+      <UnsplashImage
+        image={images.chef}
+        width={640}
+        height={720}
+        sizes="(max-width: 860px) 100vw, 33vw"
+        class="tile__bg"
+      />
+      <span class="tile__badge"><Icon name="chart" size={18} /></span>
+      <div class="tile__card">
+        <p class="tile__number">40%</p>
+        <p>More bookings in three months for one of our dining clients.</p>
+      </div>
+    </article>
+
+    <article class="tile tile--cloud" data-reveal style="--reveal-delay: 0.1s">
+      <p class="tile__kicker">Nights we market for</p>
+      <p class="tile__number">7/7</p>
+      <ul role="list" class="avatars" aria-hidden="true">
+        {
+          avatars.map((avatar) => (
+            <li>
+              <UnsplashImage image={avatar} width={64} height={64} sizes="40px" widths={[64, 128]} alt="" />
+            </li>
+          ))
+        }
+      </ul>
+      <blockquote class="tile__quote">“{featured.quote}”</blockquote>
+    </article>
+
+    <div class="tile-stack">
+      <article class="tile tile--lime" data-reveal style="--reveal-delay: 0.2s">
+        <p class="tile__kicker">Core services</p>
+        <p class="tile__number">4</p>
+        <p>Table-filling campaigns, social media, event boosts and audits — under one roof.</p>
+      </article>
+      <article class="tile tile--ink" data-reveal style="--reveal-delay: 0.3s">
+        <p class="tile__kicker">Our one goal</p>
+        <p class="tile__number tile__number--sm">Full tables</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bento-section {
+    padding-bottom: var(--space-2xl);
+  }
+
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+
+  .tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    min-height: 200px;
+  }
+
+  .tile__kicker {
+    font-size: var(--fs-sm);
+  }
+
+  .tile__number {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 2rem + 2vw, 3.75rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .tile__number--sm {
+    font-size: var(--fs-2xl);
+  }
+
+  .tile--photo {
+    justify-content: flex-end;
+    min-height: 420px;
+    background: var(--c-sky);
+    border: 3px solid var(--c-sky-300);
+  }
+
+  .tile__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .tile__badge {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--c-paper);
+  }
+
+  .tile__card {
+    position: relative;
+    display: grid;
+    gap: var(--space-xs);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    background: var(--c-paper);
+    font-size: var(--fs-sm);
+  }
+
+  .tile--cloud {
+    background: var(--c-cloud);
+  }
+
+  .avatars {
+    display: flex;
+    margin-top: auto;
+  }
+
+  .avatars li + li {
+    margin-left: -0.6rem;
+  }
+
+  .avatars :global(img) {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 3px solid var(--c-cloud);
+    object-fit: cover;
+  }
+
+  .tile__quote {
+    font-size: var(--fs-sm);
+  }
+
+  .tile-stack {
+    display: grid;
+    gap: var(--space-md);
+    grid-template-rows: 1.4fr 1fr;
+  }
+
+  .tile--lime {
+    background: var(--c-lime);
+    border: 3px solid var(--c-lime-600);
+  }
+
+  .tile--lime p:last-child {
+    margin-top: auto;
+    font-size: var(--fs-sm);
+  }
+
+  .tile--ink {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 0;
+    background: var(--c-ink);
+    color: var(--c-paper);
+  }
+
+  .tile--ink .tile__number {
+    color: var(--c-lime);
+  }
+
+  @media (max-width: 860px) {
+    .bento {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
