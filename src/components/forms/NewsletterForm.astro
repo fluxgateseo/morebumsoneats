@@ -1,0 +1,94 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+
+export interface Props {
+  id?: string;
+}
+
+const { id = 'newsletter' } = Astro.props;
+---
+
+<form class="newsletter" method="post" action="/api/leads" data-lead-form>
+  <input type="hidden" name="form" value="newsletter" />
+  <label for={`${id}-email`} class="visually-hidden">Email address</label>
+  <input
+    id={`${id}-email`}
+    class="newsletter__input"
+    type="email"
+    name="email"
+    placeholder="you@yourvenue.com"
+    autocomplete="email"
+    required
+  />
+  <div class="hp" aria-hidden="true">
+    <label for={`${id}-company`}>Leave this field empty</label>
+    <input id={`${id}-company`} type="text" name="company" tabindex="-1" autocomplete="off" />
+  </div>
+  <button type="submit" class="newsletter__submit" aria-label="Subscribe">
+    <Icon name="arrow-right" />
+  </button>
+  <p class="newsletter__status" role="status" aria-live="polite" data-form-status></p>
+</form>
+
+<style>
+  .newsletter {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    padding: 0.35rem;
+    border-radius: var(--radius-pill);
+    background: rgb(255 255 255 / 0.08);
+    border: 1px solid rgb(255 255 255 / 0.15);
+  }
+
+  .newsletter__input {
+    flex: 1;
+    min-width: 0;
+    padding: 0 1rem;
+    border: 0;
+    background: transparent;
+    color: var(--c-paper);
+  }
+
+  .newsletter__input::placeholder {
+    color: rgb(255 255 255 / 0.5);
+  }
+
+  .newsletter__input:focus {
+    outline: none;
+  }
+
+  .newsletter:focus-within {
+    border-color: var(--c-lime);
+  }
+
+  .newsletter__submit {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0;
+    border-radius: 50%;
+    background: var(--c-lime);
+    color: var(--c-ink);
+    cursor: pointer;
+    transition: transform 0.25s var(--ease-out);
+  }
+
+  .newsletter__submit:hover {
+    transform: rotate(-45deg);
+  }
+
+  .newsletter__status {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 1rem;
+    font-size: var(--fs-sm);
+  }
+
+  .hp {
+    position: absolute;
+    left: -9999px;
+  }
+</style>

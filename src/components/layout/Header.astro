@@ -1,0 +1,185 @@
+---
+import Logo from '@/components/ui/Logo.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { mainNav, primaryCta } from '@/data/navigation';
+
+const currentPath = Astro.url.pathname;
+const isActive = (href: string) => (href === '/' ? currentPath === '/' : currentPath.startsWith(href));
+---
+
+<header class="site-header" data-header>
+  <div class="site-header__inner">
+    <Logo />
+
+    <nav class="site-nav" id="site-nav" aria-label="Main" data-nav>
+      <ul role="list" class="site-nav__list">
+        {
+          mainNav.map((item) => (
+            <li>
+              <a href={item.href} class="site-nav__link" aria-current={isActive(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <Button href={primaryCta.href} class="site-nav__cta">{primaryCta.label}</Button>
+    </nav>
+
+    <button
+      class="site-header__toggle"
+      type="button"
+      aria-controls="site-nav"
+      aria-expanded="false"
+      data-nav-toggle
+    >
+      <span class="visually-hidden">Toggle menu</span>
+      <Icon name="menu" class="icon-open" />
+      <Icon name="close" class="icon-close" />
+    </button>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0.75rem 0 auto;
+    z-index: 50;
+    padding-inline: calc(var(--gutter) + 0.5rem);
+    color: var(--c-paper);
+    pointer-events: none;
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+    max-width: var(--container);
+    margin-inline: auto;
+    padding: 0.6rem 0.6rem 0.6rem 1rem;
+    border-radius: var(--radius-pill);
+    pointer-events: auto;
+    transition:
+      background-color 0.35s var(--ease-out),
+      box-shadow 0.35s var(--ease-out),
+      backdrop-filter 0.35s var(--ease-out);
+  }
+
+  :global(.site-header.is-scrolled) .site-header__inner {
+    background: rgb(12 13 18 / 0.82);
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(14px) saturate(1.4);
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xl);
+  }
+
+  .site-nav__list {
+    display: flex;
+    gap: var(--space-xl);
+  }
+
+  .site-nav__link {
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding-block: 0.4rem;
+  }
+
+  .site-nav__link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--c-lime);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .site-nav__link:hover::after,
+  .site-nav__link[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+
+  .site-header__toggle {
+    display: none;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0;
+    border-radius: 50%;
+    background: var(--c-lime);
+    color: var(--c-ink);
+    cursor: pointer;
+  }
+
+  .site-header__toggle .icon-close,
+  .site-header__toggle[aria-expanded='true'] .icon-open {
+    display: none;
+  }
+
+  .site-header__toggle[aria-expanded='true'] .icon-close {
+    display: block;
+  }
+
+  @media (max-width: 860px) {
+    .site-header__toggle {
+      display: grid;
+    }
+
+    .site-nav {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      left: calc(var(--gutter) + 0.5rem);
+      right: calc(var(--gutter) + 0.5rem);
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      border-radius: var(--radius-lg);
+      background: var(--c-ink);
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition:
+        opacity 0.25s var(--ease-out),
+        transform 0.25s var(--ease-out),
+        visibility 0.25s;
+    }
+
+    .site-nav.is-open {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      pointer-events: auto;
+    }
+
+    .site-nav__list {
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .site-nav__link {
+      display: block;
+      padding: var(--space-sm) 0;
+      font-size: var(--fs-sm);
+    }
+
+    .site-nav__link::after {
+      bottom: 0.4rem;
+      right: auto;
+      width: 2rem;
+    }
+  }
+</style>
