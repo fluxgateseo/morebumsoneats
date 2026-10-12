@@ -123,12 +123,12 @@ const isActive = (href: string) => (href === '/' ? currentPath === '/' : current
     cursor: pointer;
   }
 
-  .site-header__toggle .icon-close,
-  .site-header__toggle[aria-expanded='true'] .icon-open {
+  .site-header__toggle :global(.icon-close),
+  .site-header__toggle[aria-expanded='true'] :global(.icon-open) {
     display: none;
   }
 
-  .site-header__toggle[aria-expanded='true'] .icon-close {
+  .site-header__toggle[aria-expanded='true'] :global(.icon-close) {
     display: block;
   }
 
