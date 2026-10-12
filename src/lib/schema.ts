@@ -88,3 +88,18 @@ export function faqSchema(faqs: Faq[]): JsonLd {
 export function graph(...nodes: JsonLd[]): JsonLd {
   return { '@context': 'https://schema.org', '@graph': nodes };
 }
+
+export function webPageSchema(
+  type: 'WebPage' | 'AboutPage' | 'ContactPage',
+  { name, path, description }: { name: string; path: string; description: string },
+): JsonLd {
+  return {
+    '@type': type,
+    '@id': absolute(`${path}#webpage`),
+    url: absolute(path),
+    name,
+    description,
+    isPartOf: { '@id': WEBSITE_ID },
+    about: { '@id': ORG_ID },
+  };
+}
