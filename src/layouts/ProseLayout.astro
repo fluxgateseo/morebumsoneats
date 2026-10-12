@@ -1,19 +1,21 @@
 ---
 /** Simple long-form text layout for legal and utility pages. */
 import BaseLayout, { type Props as BaseProps } from './BaseLayout.astro';
+import type { ImageMetadata } from 'astro';
 import PageHero from '@/components/sections/PageHero.astro';
 
 export interface Props extends BaseProps {
   heading: string;
   eyebrow: string;
   lead?: string;
+  illustration?: ImageMetadata;
 }
 
-const { heading, eyebrow, lead, ...seo } = Astro.props;
+const { heading, eyebrow, lead, illustration, ...seo } = Astro.props;
 ---
 
 <BaseLayout {...seo}>
-  <PageHero eyebrow={eyebrow} title={heading} lead={lead} tone="pink" />
+  <PageHero eyebrow={eyebrow} title={heading} lead={lead} illustration={illustration} />
   <section class="section">
     <div class="container prose">
       <slot />
@@ -42,7 +44,7 @@ const { heading, eyebrow, lead, ...seo } = Astro.props;
     padding-left: 1.25rem;
   }
 
-  .prose :global(a) {
+  .prose :global(a:not(.btn)) {
     color: var(--c-sky);
     text-decoration: underline;
   }

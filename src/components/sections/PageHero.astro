@@ -1,5 +1,7 @@
 ---
 /** Colourful hero used at the top of inner pages, with visible breadcrumbs. */
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
 import type { SiteImage } from '@/data/images';
 import UnsplashImage from '@/components/ui/UnsplashImage.astro';
 
@@ -8,10 +10,12 @@ export interface Props {
   title: string;
   lead?: string;
   image?: SiteImage;
+  /** Brand illustration shown instead of a photo. */
+  illustration?: ImageMetadata;
   tone?: 'sky' | 'tomato' | 'ink' | 'pink';
 }
 
-const { eyebrow, title, lead, image, tone = 'sky' } = Astro.props;
+const { eyebrow, title, lead, image, illustration, tone = 'sky' } = Astro.props;
 ---
 
 <section class:list={['page-hero', `page-hero--${tone}`]} aria-labelledby="page-title">
@@ -41,13 +45,28 @@ const { eyebrow, title, lead, image, tone = 'sky' } = Astro.props;
         </div>
       )
     }
+    {
+      illustration && (
+        <div class="page-hero__media page-hero__media--art">
+          <Image
+            src={illustration}
+            alt=""
+            widths={[320, 480, 640]}
+            sizes="(max-width: 860px) 70vw, 420px"
+            format="webp"
+            quality={80}
+            loading="eager"
+          />
+        </div>
+      )
+    }
   </div>
 </section>
 
 <style>
   .page-hero {
     margin: 0.5rem;
-    padding-top: clamp(7rem, 12vw, 9rem);
+    padding-top: clamp(8.5rem, 14vw, 11.5rem);
     padding-bottom: var(--space-2xl);
     border-radius: var(--radius-xl);
     color: var(--c-paper);
@@ -136,6 +155,22 @@ const { eyebrow, title, lead, image, tone = 'sky' } = Astro.props;
     aspect-ratio: 72 / 56;
     object-fit: cover;
     rotate: 2deg;
+  }
+
+  .page-hero__media--art {
+    justify-self: center;
+    width: min(420px, 100%);
+  }
+
+  .page-hero__media--art :global(img) {
+    width: 100%;
+    height: auto;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    aspect-ratio: auto;
+    rotate: 0deg;
+    filter: drop-shadow(0 18px 24px rgb(12 13 18 / 0.3));
   }
 
   @media (max-width: 860px) {
