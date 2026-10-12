@@ -1,0 +1,179 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/sections/PageHero.astro';
+import Process from '@/components/sections/Process.astro';
+import Testimonials from '@/components/sections/Testimonials.astro';
+import FaqList from '@/components/sections/FaqList.astro';
+import CtaBanner from '@/components/sections/CtaBanner.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import UnsplashImage from '@/components/ui/UnsplashImage.astro';
+import { images } from '@/data/images';
+import { services } from '@/data/services';
+import { faqs } from '@/data/faqs';
+import { breadcrumbSchema, faqSchema, graph, servicesSchema } from '@/lib/schema';
+
+const jsonLd = graph(
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Services', path: '/services/' },
+  ]),
+  servicesSchema(services),
+  faqSchema(faqs),
+);
+---
+
+<BaseLayout
+  title="Restaurant Marketing Services"
+  description="Table-filling local campaigns, social media for restaurants, event promotion and marketing audits — services built to boost bookings for restaurants and bars."
+  ogImage={images.terrace.id}
+  jsonLd={jsonLd}
+>
+  <PageHero
+    eyebrow="Services"
+    title="Marketing that <span>fills seats</span>, night after night"
+    lead="Targeted local marketing that drives reservations, builds buzz and keeps your dining room busy — from Monday lulls to Saturday rushes."
+    image={images.terrace}
+  >
+    <Button href="/contact/" withArrow>Let’s talk</Button>
+  </PageHero>
+
+  <section class="section" aria-label="Our services">
+    <div class="container service-list">
+      {
+        services.map((service, i) => (
+          <article id={service.slug} class:list={['service-row', `tone-${service.accent}`]} data-reveal>
+            <div class="service-row__media">
+              <UnsplashImage
+                image={service.image}
+                width={720}
+                height={540}
+                sizes="(max-width: 860px) 100vw, 50vw"
+              />
+            </div>
+            <div class="service-row__copy">
+              <span class="service-row__index">0{i + 1}</span>
+              <h2 class="service-row__title">{service.title}</h2>
+              <p class="lead">{service.description}</p>
+              <ul role="list" class="service-row__list">
+                {service.deliverables.map((item) => (
+                  <li>
+                    <span class="tick" aria-hidden="true">
+                      <Icon name="check" size={14} />
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <Process />
+  <Testimonials limit={2} />
+  <FaqList />
+  <CtaBanner title="Let’s talk about your quiet nights" text="Ready to see your seats filled and revenue grow? Reach out today." />
+</BaseLayout>
+
+<style>
+  .service-list {
+    display: grid;
+    gap: var(--space-2xl);
+  }
+
+  .service-row {
+    --tone: var(--c-sky);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+    scroll-margin-top: 6rem;
+  }
+
+  .service-row:nth-child(even) .service-row__media {
+    order: 2;
+  }
+
+  .tone-sky {
+    --tone: var(--c-sky);
+  }
+  .tone-tomato {
+    --tone: var(--c-tomato);
+  }
+  .tone-lime {
+    --tone: var(--c-lime);
+  }
+  .tone-pink {
+    --tone: var(--c-pink);
+  }
+
+  .service-row__media {
+    padding: 0.6rem;
+    border-radius: var(--radius-xl);
+    background: var(--tone);
+  }
+
+  .service-row__media :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: calc(var(--radius-xl) - 0.6rem);
+  }
+
+  .service-row__copy {
+    display: grid;
+    gap: var(--space-md);
+    justify-items: start;
+  }
+
+  .service-row__index {
+    display: inline-grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: var(--tone);
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+
+  .service-row__title {
+    font-size: var(--fs-3xl);
+  }
+
+  .service-row__list {
+    display: grid;
+    gap: var(--space-xs);
+  }
+
+  .service-row__list li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-weight: 500;
+  }
+
+  .tick {
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--c-ink);
+    color: var(--c-lime);
+  }
+
+  @media (max-width: 860px) {
+    .service-row {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+
+    .service-row:nth-child(even) .service-row__media {
+      order: 0;
+    }
+  }
+</style>
