@@ -1,0 +1,108 @@
+---
+import Icon from './Icon.astro';
+
+export interface Props {
+  href?: string;
+  variant?: 'lime' | 'ink' | 'glass' | 'outline' | 'white';
+  type?: 'button' | 'submit';
+  withArrow?: boolean;
+  class?: string;
+}
+
+const { href, variant = 'lime', type = 'button', withArrow = false, class: className } = Astro.props;
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  href={href}
+  type={href ? undefined : type}
+  class:list={['btn', `btn--${variant}`, { 'btn--arrow': withArrow }, className]}
+>
+  <span class="btn__label"><slot /></span>
+  {
+    withArrow && (
+      <span class="btn__icon" aria-hidden="true">
+        <Icon name="arrow-up-right" size={16} />
+      </span>
+    )
+  }
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    min-height: 2.75rem;
+    padding: 0.35rem 1.4rem;
+    border: 2px solid transparent;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      transform 0.25s var(--ease-out),
+      background-color 0.25s var(--ease-out),
+      box-shadow 0.25s var(--ease-out);
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn--arrow {
+    padding-right: 0.35rem;
+  }
+
+  .btn__icon {
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    background: var(--c-ink);
+    color: var(--c-lime);
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .btn:hover .btn__icon {
+    transform: rotate(45deg);
+  }
+
+  .btn--lime {
+    background: var(--c-lime);
+    color: var(--c-ink);
+    box-shadow: 0 0 0 4px rgb(215 247 91 / 0.3);
+  }
+
+  .btn--ink {
+    background: var(--c-ink);
+    color: var(--c-paper);
+  }
+
+  .btn--ink .btn__icon {
+    background: var(--c-lime);
+    color: var(--c-ink);
+  }
+
+  .btn--white {
+    background: var(--c-paper);
+    color: var(--c-ink);
+  }
+
+  .btn--glass {
+    background: rgb(12 13 18 / 0.28);
+    color: var(--c-paper);
+    border-color: rgb(255 255 255 / 0.25);
+    backdrop-filter: blur(8px);
+  }
+
+  .btn--outline {
+    background: transparent;
+    color: var(--c-ink);
+    border-color: var(--c-ink);
+  }
+</style>
