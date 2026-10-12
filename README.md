@@ -31,7 +31,8 @@ npm run dev        # http://localhost:4321
 ├── public/                    # Copied as-is to dist/
 │   ├── _headers               # Security + caching headers
 │   ├── _redirects             # 301s for legacy WordPress URLs
-│   └── favicon.svg
+│   ├── favicon.png / apple-touch-icon.png
+│   └── logo.png               # Used in structured data
 ├── src/
 │   ├── components/
 │   │   ├── forms/             # ContactForm, NewsletterForm, FormSubmit fields

@@ -21,7 +21,7 @@ export function organizationSchema(): JsonLd {
     url: site.url,
     description: site.description,
     slogan: site.tagline,
-    logo: absolute('/favicon.svg'),
+    logo: absolute('/logo.png'),
     image: unsplashUrl(site.defaultOgImage, { width: 1200, height: 630, format: 'jpg' }),
     email: site.contact.email,
     knowsAbout: ['Restaurant marketing', 'Hospitality marketing', 'Local SEO', 'Social media marketing'],

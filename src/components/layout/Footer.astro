@@ -19,7 +19,7 @@ const year = new Date().getFullYear();
   <div class="container">
     <div class="site-footer__grid">
       <div class="site-footer__brand stack">
-        <Logo />
+        <Logo width={240} class="site-footer__logo" />
         <p class="text-dim">
           Restaurant marketing that fills tables, packs bars and grows revenue — seven nights a week.
         </p>
@@ -87,6 +87,10 @@ const year = new Date().getFullYear();
   .text-dim {
     color: rgb(255 255 255 / 0.65);
     font-size: var(--fs-sm);
+  }
+
+  .site-footer :global(.site-footer__logo) {
+    --logo-width: 220px;
   }
 
   .site-footer__title {

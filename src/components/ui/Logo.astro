@@ -1,45 +1,46 @@
 ---
+import { Image } from 'astro:assets';
+import logo from '@/assets/brand/logo.png';
 import { site } from '@/config/site';
 
 export interface Props {
   class?: string;
+  /** Rendered width in CSS pixels (height follows the artwork's ratio). */
+  width?: number;
+  /** Load eagerly when the logo is above the fold. */
+  priority?: boolean;
 }
 
-const { class: className } = Astro.props;
+const { class: className, width = 200, priority = false } = Astro.props;
 ---
 
 <a href="/" class:list={['logo', className]} aria-label={`${site.name} — home`}>
-  <svg class="logo__mark" viewBox="0 0 40 40" width="36" height="36" aria-hidden="true">
-    <rect width="40" height="40" rx="12" fill="var(--c-lime)"></rect>
-    <path
-      d="M12 9v13a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1M12 25l-2 7M28 25l2 7M15 25v7M25 25v7"
-      fill="none"
-      stroke="var(--c-ink)"
-      stroke-width="3"
-      stroke-linecap="round"
-      stroke-linejoin="round"></path>
-  </svg>
-  <span class="logo__text">More Bums<br />on Seats</span>
+  <Image
+    src={logo}
+    alt={site.name}
+    width={width}
+    densities={[1, 2]}
+    format="webp"
+    quality={85}
+    loading={priority ? 'eager' : 'lazy'}
+    fetchpriority={priority ? 'high' : 'auto'}
+    class="logo__img"
+  />
 </a>
 
 <style>
   .logo {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 0.95rem;
-    line-height: 0.95;
-    letter-spacing: -0.02em;
+    display: inline-block;
+    line-height: 0;
   }
 
-  .logo__mark {
-    flex-shrink: 0;
+  .logo__img {
+    width: var(--logo-width, auto);
+    height: auto;
     transition: transform 0.4s var(--ease-out);
   }
 
-  .logo:hover .logo__mark {
-    transform: rotate(-8deg) scale(1.05);
+  .logo:hover .logo__img {
+    transform: rotate(-3deg) scale(1.03);
   }
 </style>
