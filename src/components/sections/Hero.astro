@@ -1,9 +1,20 @@
 ---
+import { Image } from 'astro:assets';
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
 import UnsplashImage from '@/components/ui/UnsplashImage.astro';
 import { site } from '@/config/site';
 import { images } from '@/data/images';
+import jumpingFriends from '@/assets/illustrations/jumping-friends.png';
+import friendsAtTable from '@/assets/illustrations/friends-at-table.png';
+import celebratingOnStool from '@/assets/illustrations/celebrating-on-stool.png';
+
+/** Brand illustrations framing the headline (decorative). */
+const illustrations = [
+  { src: jumpingFriends, modifier: 'jump', sizes: '(max-width: 1100px) 0px, 22vw' },
+  { src: celebratingOnStool, modifier: 'stool', sizes: '(max-width: 1100px) 0px, 18vw' },
+  { src: friendsAtTable, modifier: 'table', sizes: '(max-width: 1100px) 320px, 26vw' },
+];
 
 /** Floating "deck" of cards — decorative, so hidden from assistive tech. */
 const cards = [
@@ -24,6 +35,22 @@ const center = (cards.length - 1) / 2;
 <section class="hero" aria-labelledby="hero-title">
   <div class="hero__sky" aria-hidden="true"></div>
 
+  <div class="hero__stage">
+    {
+      illustrations.map(({ src, modifier, sizes }) => (
+        <Image
+          src={src}
+          alt=""
+          widths={[320, 480, 640, 800]}
+          sizes={sizes}
+          format="webp"
+          quality={80}
+          loading="eager"
+          class={`hero__art hero__art--${modifier}`}
+        />
+      ))
+    }
+
   <div class="hero__content container">
     <p class="eyebrow hero__eyebrow">Restaurant &amp; hospitality marketing</p>
     <h1 id="hero-title" class="hero__title">
@@ -37,6 +64,7 @@ const center = (cards.length - 1) / 2;
       <Button href={`mailto:${site.contact.email}`} variant="glass">Email us</Button>
       <Button href="/contact/" withArrow>Get a free audit</Button>
     </div>
+  </div>
   </div>
 
   <div class="deck" aria-hidden="true">
@@ -118,7 +146,7 @@ const center = (cards.length - 1) / 2;
   .hero {
     position: relative;
     margin: 0.5rem;
-    padding-top: clamp(7rem, 12vw, 9.5rem);
+    padding-top: clamp(8.5rem, 14vw, 12rem);
     padding-bottom: var(--space-xl);
     border-radius: var(--radius-xl);
     color: var(--c-paper);
@@ -140,11 +168,53 @@ const center = (cards.length - 1) / 2;
       linear-gradient(180deg, var(--c-sky-700) 0%, var(--c-sky) 40%, var(--c-sky-300) 78%, var(--c-sky-100) 100%);
   }
 
+  /* ---------- Illustrations ---------- */
+  .hero__stage {
+    position: relative;
+  }
+
   .hero__content {
+    position: relative;
+    z-index: 1;
     display: grid;
     justify-items: center;
     text-align: center;
     gap: var(--space-lg);
+  }
+
+  .hero :global(.hero__art) {
+    position: absolute;
+    height: auto;
+    pointer-events: none;
+    filter: drop-shadow(0 18px 24px rgb(11 79 214 / 0.35));
+    animation: bob 7s ease-in-out infinite;
+  }
+
+  .hero :global(.hero__art--jump) {
+    top: -5.5rem;
+    left: 1.5%;
+    width: clamp(220px, 21vw, 330px);
+  }
+
+  .hero :global(.hero__art--stool) {
+    bottom: -9rem;
+    left: 2.5%;
+    width: clamp(190px, 17vw, 270px);
+    animation-delay: -2s;
+  }
+
+  .hero :global(.hero__art--table) {
+    bottom: -9rem;
+    right: 1%;
+    width: clamp(260px, 25vw, 390px);
+    animation-delay: -4s;
+  }
+
+  @keyframes bob {
+    50% {
+      translate: 0 -8px;
+      rotate: -1deg;
+    }
   }
 
   .hero__eyebrow {
@@ -183,7 +253,7 @@ const center = (cards.length - 1) / 2;
     justify-content: center;
     align-items: center;
     gap: clamp(0.4rem, 1vw, 1rem);
-    margin-top: clamp(2.5rem, 6vw, 4.5rem);
+    margin-top: clamp(3rem, 12vw, 12rem);
     perspective: 1100px;
     min-height: 240px;
   }
@@ -360,6 +430,33 @@ const center = (cards.length - 1) / 2;
   }
 
   @media (max-width: 1100px) {
+    .hero :global(.hero__art--jump),
+    .hero :global(.hero__art--stool) {
+      display: none;
+    }
+
+    .hero :global(.hero__art--table) {
+      position: relative;
+      inset: auto;
+      display: block;
+      order: 2;
+      width: min(320px, 80%);
+      margin: var(--space-xl) auto 0;
+    }
+
+    .hero__stage {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero__content {
+      order: 1;
+    }
+
+    .deck {
+      margin-top: var(--space-xl);
+    }
+
     .deck__card:nth-child(1),
     .deck__card:nth-child(9) {
       display: none;
