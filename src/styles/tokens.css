@@ -1,0 +1,57 @@
+/* Design tokens — bold, clean & colourful. */
+:root {
+  /* Brand palette */
+  --c-ink: #0c0d12;
+  --c-ink-soft: #3b3d48;
+  --c-muted: #6b6e7b;
+  --c-paper: #ffffff;
+  --c-cloud: #f2f2f0;
+  --c-line: #e4e4e0;
+
+  --c-sky-700: #0b4fd6;
+  --c-sky: #1466f5;
+  --c-sky-300: #63b4ff;
+  --c-sky-100: #dcefff;
+  --c-lime: #d7f75b;
+  --c-lime-600: #b7db2c;
+  --c-tomato: #ff5a36;
+  --c-pink: #ff8fcf;
+  --c-sun: #ffc83d;
+
+  /* Typography */
+  --font-display: 'Bricolage Grotesque Variable', 'Inter Variable', system-ui, sans-serif;
+  --font-body: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-xl: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --fs-2xl: clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem);
+  --fs-3xl: clamp(2.25rem, 1.6rem + 2.8vw, 3.75rem);
+  --fs-4xl: clamp(2.75rem, 1.8rem + 4.4vw, 5.25rem);
+
+  /* Spacing & layout */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: clamp(3rem, 2rem + 4vw, 6rem);
+  --container: 1240px;
+  --gutter: clamp(1rem, 0.5rem + 2vw, 2rem);
+
+  /* Shape & depth */
+  --radius-sm: 0.75rem;
+  --radius-md: 1.25rem;
+  --radius-lg: 1.75rem;
+  --radius-xl: 2.25rem;
+  --radius-pill: 999px;
+  --shadow-sm: 0 2px 8px rgb(12 13 18 / 0.08);
+  --shadow-md: 0 18px 40px -18px rgb(12 13 18 / 0.35);
+  --shadow-lg: 0 40px 80px -30px rgb(11 79 214 / 0.55);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
