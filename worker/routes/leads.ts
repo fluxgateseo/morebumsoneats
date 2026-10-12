@@ -1,5 +1,5 @@
 /**
- * Cloudflare Pages Function — POST /api/leads
+ * POST /api/leads
  *
  * Receives the contact and newsletter forms, validates them and emails the
  * lead to `LEADS_EMAIL` via FormSubmit (https://formsubmit.co). Sending
@@ -9,9 +9,7 @@
  * for regular (no-JS) form posts.
  */
 
-interface Env {
-  LEADS_EMAIL?: string;
-}
+import type { Env } from '../env';
 
 const FORMSUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/';
 
@@ -90,7 +88,7 @@ function respond(request: Request, status: number, message: string): Response {
   return new Response(message, { status, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
 }
 
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+export async function handleLeads(request: Request, env: Env): Promise<Response> {
   let data: FormData;
   try {
     data = await request.formData();
@@ -122,4 +120,4 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       : 'Thanks! We’ll be in touch within one working day.';
 
   return respond(request, 200, message);
-};
+}

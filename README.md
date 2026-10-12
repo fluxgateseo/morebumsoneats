@@ -2,7 +2,8 @@
 
 Marketing website for **More Bums on Seats**, a restaurant & hospitality marketing agency.
 Built with [Astro](https://astro.build) as a fast, fully static, SEO-friendly site and deployed on
-[Cloudflare Pages](https://pages.cloudflare.com).
+[Cloudflare Workers static assets](https://developers.cloudflare.com/workers/static-assets/), with a
+tiny Worker handling the form API.
 
 - Bold, clean, colourful design (sky / lime / tomato / pink palette)
 - Food & beverage photography from [Unsplash](https://unsplash.com), served responsively from its CDN
@@ -19,17 +20,19 @@ npm run dev        # http://localhost:4321
 | Script            | What it does                                                        |
 | ----------------- | ------------------------------------------------------------------- |
 | `npm run dev`     | Start the Astro dev server                                          |
-| `npm run check`   | Type-check Astro pages and the Cloudflare Pages Functions           |
+| `npm run check`   | Type-check Astro pages and the Cloudflare Worker                    |
 | `npm run build`   | Type-check, then build the static site into `dist/`                 |
-| `npm run preview` | Build and serve `dist/` with Wrangler (includes `/api` functions)   |
-| `npm run deploy`  | Build and deploy to Cloudflare Pages with Wrangler                  |
+| `npm run preview` | Build and run the site + Worker locally with `wrangler dev`         |
+| `npm run deploy`  | Build and deploy to Cloudflare with `wrangler deploy`               |
 
 ## Project structure
 
 ```text
 .
-├── functions/                 # Cloudflare Pages Functions (server-side)
-│   └── api/leads.ts           # POST /api/leads — contact & newsletter forms
+├── worker/                    # Cloudflare Worker (server-side)
+│   ├── index.ts               # Entry: routes /api/*, everything else → static assets
+│   ├── env.ts                 # Bindings & variables
+│   └── routes/leads.ts        # POST /api/leads — contact & newsletter forms
 ├── public/                    # Copied as-is to dist/
 │   ├── _headers               # Security + caching headers
 │   ├── _redirects             # 301s for legacy WordPress URLs
@@ -67,20 +70,23 @@ To change a photo, swap its Unsplash id in `src/data/images.ts`.
 - Utility pages (`/404`, `/thank-you/`) are `noindex` and excluded from the sitemap
 - Legacy WordPress URLs are 301-redirected
 
-## Deploying to Cloudflare Pages
+## Deploying to Cloudflare
+
+The site deploys as a Cloudflare **Worker with static assets** (`wrangler.toml`): Astro's `dist/`
+folder is served from Cloudflare's edge, `_headers` / `_redirects` are applied automatically, and
+only `/api/*` requests run the Worker script.
 
 ### Option A — Git integration (recommended)
 
 1. Push this repository to GitHub.
-2. In the Cloudflare dashboard go to **Workers & Pages → Create → Pages → Connect to Git** and pick the repo.
+2. In the Cloudflare dashboard go to **Workers & Pages → Create → Import a repository** and pick the repo.
 3. Build settings:
-   - **Framework preset:** Astro
    - **Build command:** `npm run build`
-   - **Build output directory:** `dist`
-   - **Environment variable:** `NODE_VERSION = 22`
-4. Under **Custom domains**, add `morebumsonseats.com` (and `www`, redirected to the apex).
+   - **Deploy command:** `npx wrangler deploy`
+   - **Environment variable:** `NODE_VERSION = 22` (optional; `.nvmrc` already pins it)
+4. Under **Settings → Domains & Routes**, add `morebumsonseats.com` (and `www`).
 
-Every push to the production branch deploys automatically; other branches get preview URLs.
+Every push to the production branch deploys automatically.
 
 ### Option B — Wrangler CLI
 
@@ -92,7 +98,7 @@ npm run deploy
 ## Forms
 
 Both the contact form and the newsletter form post to `/api/leads`
-(`functions/api/leads.ts`). The function validates input, filters bots with a honeypot field and
+(`worker/routes/leads.ts`). The function validates input, filters bots with a honeypot field and
 emails each submission to the inbox set in **`LEADS_EMAIL`** (`wrangler.toml` →
 `seoforestaurants@gmail.com`) using [FormSubmit](https://formsubmit.co). Because the email is sent
 server-side, the recipient address never appears in the public HTML.

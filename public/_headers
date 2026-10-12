@@ -1,5 +1,5 @@
-# Cloudflare Pages custom headers
-# https://developers.cloudflare.com/pages/configuration/headers/
+# Cloudflare static assets — custom headers
+# https://developers.cloudflare.com/workers/static-assets/headers/
 
 /*
   X-Content-Type-Options: nosniff

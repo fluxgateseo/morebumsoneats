@@ -1,5 +1,5 @@
-# Cloudflare Pages redirects
-# https://developers.cloudflare.com/pages/configuration/redirects/
+# Cloudflare static assets — redirects
+# https://developers.cloudflare.com/workers/static-assets/redirects/
 
 # Legacy WordPress URLs from the previous site
 /feed                /                301

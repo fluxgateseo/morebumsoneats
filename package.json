@@ -10,9 +10,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "npm run check && astro build",
-    "preview": "astro build && wrangler pages dev ./dist",
-    "check": "astro check && tsc -p functions/tsconfig.json",
-    "deploy": "npm run build && wrangler pages deploy ./dist"
+    "preview": "astro build && wrangler dev",
+    "check": "astro check && tsc -p worker/tsconfig.json",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
