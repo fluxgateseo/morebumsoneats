@@ -2,8 +2,7 @@
 
 Marketing website for **More Bums on Seats**, a restaurant & hospitality marketing agency.
 Built with [Astro](https://astro.build) as a fast, fully static, SEO-friendly site and deployed on
-[Cloudflare Workers static assets](https://developers.cloudflare.com/workers/static-assets/), with a
-tiny Worker handling the form API.
+[Cloudflare Workers static assets](https://developers.cloudflare.com/workers/static-assets/).
 
 - Bold, clean, colourful design (sky / lime / tomato / pink palette)
 - Food & beverage photography from [Unsplash](https://unsplash.com), served responsively from its CDN
@@ -20,26 +19,22 @@ npm run dev        # http://localhost:4321
 | Script            | What it does                                                        |
 | ----------------- | ------------------------------------------------------------------- |
 | `npm run dev`     | Start the Astro dev server                                          |
-| `npm run check`   | Type-check Astro pages and the Cloudflare Worker                    |
+| `npm run check`   | Type-check the project                                              |
 | `npm run build`   | Type-check, then build the static site into `dist/`                 |
-| `npm run preview` | Build and run the site + Worker locally with `wrangler dev`         |
+| `npm run preview` | Build and serve the site locally with `wrangler dev`                |
 | `npm run deploy`  | Build and deploy to Cloudflare with `wrangler deploy`               |
 
 ## Project structure
 
 ```text
 .
-├── worker/                    # Cloudflare Worker (server-side)
-│   ├── index.ts               # Entry: routes /api/*, everything else → static assets
-│   ├── env.ts                 # Bindings & variables
-│   └── routes/leads.ts        # POST /api/leads — contact & newsletter forms
 ├── public/                    # Copied as-is to dist/
 │   ├── _headers               # Security + caching headers
 │   ├── _redirects             # 301s for legacy WordPress URLs
 │   └── favicon.svg
 ├── src/
 │   ├── components/
-│   │   ├── forms/             # ContactForm, NewsletterForm
+│   │   ├── forms/             # ContactForm, NewsletterForm, FormSubmit fields
 │   │   ├── layout/            # Header, Footer
 │   │   ├── sections/          # Page sections (Hero, ServicesGrid, FaqList…)
 │   │   ├── seo/               # SEO <head> tags
@@ -47,7 +42,7 @@ npm run dev        # http://localhost:4321
 │   ├── config/site.ts         # Business details — single source of truth
 │   ├── data/                  # Content: services, testimonials, FAQs, images…
 │   ├── layouts/               # BaseLayout, ProseLayout
-│   ├── lib/                   # Helpers: Unsplash URLs, schema.org JSON-LD
+│   ├── lib/                   # Helpers: Unsplash URLs, schema.org JSON-LD, form endpoints
 │   ├── pages/                 # File-based routes (+ robots.txt endpoint)
 │   ├── scripts/               # Client-side enhancements (header, reveal, forms)
 │   └── styles/                # Design tokens + global styles
@@ -73,8 +68,8 @@ To change a photo, swap its Unsplash id in `src/data/images.ts`.
 ## Deploying to Cloudflare
 
 The site deploys as a Cloudflare **Worker with static assets** (`wrangler.toml`): Astro's `dist/`
-folder is served from Cloudflare's edge, `_headers` / `_redirects` are applied automatically, and
-only `/api/*` requests run the Worker script.
+folder is served from Cloudflare's edge and `_headers` / `_redirects` are applied automatically.
+There is no server code to run.
 
 ### Option A — Git integration (recommended)
 
@@ -97,18 +92,18 @@ npm run deploy
 
 ## Forms
 
-Both the contact form and the newsletter form post to `/api/leads`
-(`worker/routes/leads.ts`). The function validates input, filters bots with a honeypot field and
-emails each submission to the inbox set in **`LEADS_EMAIL`** (`wrangler.toml` →
-`seoforestaurants@gmail.com`) using [FormSubmit](https://formsubmit.co). Because the email is sent
-server-side, the recipient address never appears in the public HTML.
+The contact form and the newsletter form submit straight from the visitor's browser to
+[FormSubmit](https://formsubmit.co), which emails each submission to the inbox set in
+`site.forms.recipient` (`src/config/site.ts` → `seoforestaurants@gmail.com`).
 
-**One-time activation:** the very first submission makes FormSubmit send an activation email to
-`seoforestaurants@gmail.com`. Click the link in it, and every submission after that arrives as a
-normal email (the reply-to is set to the sender, so you can just hit reply).
+- With JavaScript, forms post to FormSubmit's JSON endpoint and show an inline message.
+- Without JavaScript, they post normally and FormSubmit redirects to `/thank-you/`.
+- Spam protection: FormSubmit's `_honey` honeypot field. The reply-to is the sender's email.
 
-To change the recipient, edit `LEADS_EMAIL` in `wrangler.toml` (or override it under
-**Settings → Variables and Secrets** in Cloudflare).
+**One-time activation:** the very first submission makes FormSubmit email an activation link to
+`seoforestaurants@gmail.com`. Until it's clicked, submissions aren't delivered (the site shows an
+error asking people to email you instead). After activating, FormSubmit also gives you a random
+alias string — put it in `site.forms.recipient` to hide the real address from the page source.
 
 ## Before going live
 
@@ -117,7 +112,7 @@ Some details from the old site were placeholders. Update them in one place each:
 - [ ] Contact email — `src/config/site.ts`
 - [ ] Social profile URLs — `src/config/site.ts`
 - [ ] Testimonial names and venues — `src/data/testimonials.ts`
-- [ ] Send a test enquiry and confirm the FormSubmit activation email
+- [ ] Send a test enquiry from the live site and click the FormSubmit activation link
 
 ## Credits
 

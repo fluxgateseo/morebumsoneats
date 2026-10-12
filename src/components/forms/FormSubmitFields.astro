@@ -1,0 +1,31 @@
+---
+/**
+ * Hidden FormSubmit configuration fields shared by every lead form.
+ * https://formsubmit.co/#advanced-features
+ */
+import { thankYouUrl } from '@/lib/forms';
+
+export interface Props {
+  subject: string;
+  /** Unique id prefix for the honeypot input. */
+  id: string;
+}
+
+const { subject, id } = Astro.props;
+---
+
+<input type="hidden" name="_subject" value={subject} />
+<input type="hidden" name="_template" value="table" />
+<input type="hidden" name="_captcha" value="false" />
+<input type="hidden" name="_next" value={thankYouUrl} />
+<div class="hp" aria-hidden="true">
+  <label for={`${id}-honey`}>Leave this field empty</label>
+  <input id={`${id}-honey`} type="text" name="_honey" tabindex="-1" autocomplete="off" />
+</div>
+
+<style>
+  .hp {
+    position: absolute;
+    left: -9999px;
+  }
+</style>

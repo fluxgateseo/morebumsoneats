@@ -1,17 +1,12 @@
-# Cloudflare Workers configuration (static assets + API route)
+# Cloudflare Workers static assets configuration
 # https://developers.cloudflare.com/workers/static-assets/
+#
+# The site is fully static: Astro builds it into dist/ and Cloudflare serves it
+# from the edge, applying public/_headers and public/_redirects automatically.
 name = "morebumsonseats"
-main = "worker/index.ts"
 compatibility_date = "2026-10-01"
 
 [assets]
 directory = "./dist"
-binding = "ASSETS"
 html_handling = "auto-trailing-slash"
 not_found_handling = "404-page"
-# Only API requests run the Worker; everything else is served as static files.
-run_worker_first = ["/api/*"]
-
-[vars]
-# Inbox that receives contact-form and newsletter submissions (via FormSubmit).
-LEADS_EMAIL = "seoforestaurants@gmail.com"

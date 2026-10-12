@@ -1,5 +1,7 @@
 ---
 import Icon from '@/components/ui/Icon.astro';
+import FormSubmitFields from './FormSubmitFields.astro';
+import { formAction, formAjaxAction } from '@/lib/forms';
 
 export interface Props {
   id?: string;
@@ -8,8 +10,8 @@ export interface Props {
 const { id = 'newsletter' } = Astro.props;
 ---
 
-<form class="newsletter" method="post" action="/api/leads" data-lead-form>
-  <input type="hidden" name="form" value="newsletter" />
+<form class="newsletter" method="post" action={formAction} data-ajax-action={formAjaxAction} data-lead-form>
+  <FormSubmitFields subject="New newsletter subscriber — More Bums on Seats" id={id} />
   <label for={`${id}-email`} class="visually-hidden">Email address</label>
   <input
     id={`${id}-email`}
@@ -20,10 +22,6 @@ const { id = 'newsletter' } = Astro.props;
     autocomplete="email"
     required
   />
-  <div class="hp" aria-hidden="true">
-    <label for={`${id}-company`}>Leave this field empty</label>
-    <input id={`${id}-company`} type="text" name="company" tabindex="-1" autocomplete="off" />
-  </div>
   <button type="submit" class="newsletter__submit" aria-label="Subscribe">
     <Icon name="arrow-right" />
   </button>
@@ -85,10 +83,5 @@ const { id = 'newsletter' } = Astro.props;
     top: calc(100% + 0.5rem);
     left: 1rem;
     font-size: var(--fs-sm);
-  }
-
-  .hp {
-    position: absolute;
-    left: -9999px;
   }
 </style>

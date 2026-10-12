@@ -16,6 +16,14 @@ export const site = {
   contact: {
     email: 'hello@morebumsonseats.com',
   },
+  forms: {
+    /**
+     * Inbox that receives contact and newsletter submissions via FormSubmit.
+     * After activating the form, you can replace this with the random alias
+     * FormSubmit emails you, so the real address isn't visible in the HTML.
+     */
+    recipient: 'seoforestaurants@gmail.com',
+  },
   social: {
     facebook: 'https://facebook.com/',
     instagram: 'https://instagram.com/',

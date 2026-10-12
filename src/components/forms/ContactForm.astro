@@ -1,11 +1,13 @@
 ---
 import Button from '@/components/ui/Button.astro';
+import FormSubmitFields from './FormSubmitFields.astro';
+import { formAction, formAjaxAction } from '@/lib/forms';
 
 const venueTypes = ['Restaurant', 'Bar / pub', 'Café', 'Hotel / venue', 'Other'];
 ---
 
-<form class="contact-form" method="post" action="/api/leads" data-lead-form>
-  <input type="hidden" name="form" value="contact" />
+<form class="contact-form" method="post" action={formAction} data-ajax-action={formAjaxAction} data-lead-form>
+  <FormSubmitFields subject="New enquiry — More Bums on Seats" id="contact" />
 
   <div class="field">
     <label for="name">Name</label>
@@ -33,11 +35,6 @@ const venueTypes = ['Restaurant', 'Bar / pub', 'Café', 'Hotel / venue', 'Other'
     <label for="message">Message</label>
     <textarea id="message" name="message" rows="5" required maxlength="3000"
       placeholder="Tell us about your venue and your quietest nights…"></textarea>
-  </div>
-
-  <div class="hp" aria-hidden="true">
-    <label for="company">Leave this field empty</label>
-    <input id="company" type="text" name="company" tabindex="-1" autocomplete="off" />
   </div>
 
   <label class="consent field--full">
@@ -129,11 +126,6 @@ const venueTypes = ['Restaurant', 'Bar / pub', 'Café', 'Hotel / venue', 'Other'
   .contact-form__status {
     font-size: var(--fs-sm);
     font-weight: 600;
-  }
-
-  .hp {
-    position: absolute;
-    left: -9999px;
   }
 
   @media (max-width: 560px) {
