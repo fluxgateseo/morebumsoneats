@@ -1,0 +1,30 @@
+{
+  "name": "morebumsonseats",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Marketing website for More Bums on Seats — restaurant & hospitality marketing.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "wrangler pages dev ./dist",
+    "check": "astro check",
+    "deploy": "npm run build && wrangler pages deploy ./dist"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource/space-mono": "^5.3.0",
+    "astro": "^7.3.8"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@cloudflare/workers-types": "^5.20261012.1",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.149.0"
+  }
+}
