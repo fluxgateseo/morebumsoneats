@@ -1,16 +1,19 @@
 /**
  * Cloudflare Pages Function — POST /api/leads
  *
- * Receives the contact and newsletter forms, validates them and forwards the
- * lead as JSON to `LEADS_WEBHOOK_URL` (Zapier, Make, Slack, n8n, a CRM, etc.).
+ * Receives the contact and newsletter forms, validates them and emails the
+ * lead to `LEADS_EMAIL` via FormSubmit (https://formsubmit.co). Sending
+ * server-side keeps the recipient address out of the public HTML.
  *
  * Responds with JSON for fetch() requests and with a redirect to /thank-you/
  * for regular (no-JS) form posts.
  */
 
 interface Env {
-  LEADS_WEBHOOK_URL?: string;
+  LEADS_EMAIL?: string;
 }
+
+const FORMSUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/';
 
 type FormType = 'contact' | 'newsletter';
 
@@ -53,6 +56,30 @@ function validate(data: FormData): { lead?: Lead; error?: string } {
   return { lead };
 }
 
+async function sendEmail(recipient: string, lead: Lead, origin: string): Promise<boolean> {
+  const subject =
+    lead.form === 'newsletter'
+      ? `New newsletter subscriber: ${lead.email}`
+      : `New enquiry from ${lead.name}${lead.venue ? ` (${lead.venue})` : ''}`;
+
+  const response = await fetch(FORMSUBMIT_ENDPOINT + encodeURIComponent(recipient), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      // FormSubmit only accepts submissions that identify the originating site.
+      Origin: origin,
+      Referer: lead.page ?? `${origin}/`,
+    },
+    body: JSON.stringify({ ...lead, _subject: subject, _replyto: lead.email, _template: 'table' }),
+  }).catch(() => null);
+
+  const result = response ? ((await response.json().catch(() => null)) as { success?: unknown } | null) : null;
+  const ok = response?.ok === true && String(result?.success) === 'true';
+  if (!ok) console.error('FormSubmit delivery failed', response?.status, result);
+  return ok;
+}
+
 function respond(request: Request, status: number, message: string): Response {
   const wantsJson = request.headers.get('Accept')?.includes('application/json');
   const ok = status < 400;
@@ -77,21 +104,15 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const { lead, error } = validate(data);
   if (!lead) return respond(request, 422, error ?? 'Invalid form submission.');
 
-  if (!env.LEADS_WEBHOOK_URL) {
-    console.error('LEADS_WEBHOOK_URL is not configured.');
+  if (!env.LEADS_EMAIL) {
+    console.error('LEADS_EMAIL is not configured.');
     return respond(request, 503, 'Our form is taking a break — please email us directly.');
   }
 
   lead.page = request.headers.get('Referer');
 
-  const upstream = await fetch(env.LEADS_WEBHOOK_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(lead),
-  }).catch(() => null);
-
-  if (!upstream?.ok) {
-    console.error('Lead webhook failed', upstream?.status);
+  const delivered = await sendEmail(env.LEADS_EMAIL, lead, new URL(request.url).origin);
+  if (!delivered) {
     return respond(request, 502, 'Something went wrong. Please email us instead.');
   }
 

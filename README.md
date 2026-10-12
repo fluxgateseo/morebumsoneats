@@ -78,8 +78,7 @@ To change a photo, swap its Unsplash id in `src/data/images.ts`.
    - **Build command:** `npm run build`
    - **Build output directory:** `dist`
    - **Environment variable:** `NODE_VERSION = 22`
-4. Add the secret `LEADS_WEBHOOK_URL` (see below) under **Settings → Variables and Secrets**.
-5. Under **Custom domains**, add `morebumsonseats.com` (and `www`, redirected to the apex).
+4. Under **Custom domains**, add `morebumsonseats.com` (and `www`, redirected to the apex).
 
 Every push to the production branch deploys automatically; other branches get preview URLs.
 
@@ -88,30 +87,22 @@ Every push to the production branch deploys automatically; other branches get pr
 ```bash
 npx wrangler login
 npm run deploy
-npx wrangler pages secret put LEADS_WEBHOOK_URL
 ```
 
 ## Forms
 
 Both the contact form and the newsletter form post to `/api/leads`
 (`functions/api/leads.ts`). The function validates input, filters bots with a honeypot field and
-forwards each lead as JSON to the URL in **`LEADS_WEBHOOK_URL`** — e.g. a Zapier/Make/n8n webhook,
-a Slack incoming webhook or your CRM. Payload:
+emails each submission to the inbox set in **`LEADS_EMAIL`** (`wrangler.toml` →
+`seoforestaurants@gmail.com`) using [FormSubmit](https://formsubmit.co). Because the email is sent
+server-side, the recipient address never appears in the public HTML.
 
-```json
-{
-  "form": "contact",
-  "email": "owner@venue.com",
-  "name": "Sam",
-  "venue": "The Corner Bistro",
-  "venueType": "Restaurant",
-  "message": "We're quiet on Tuesdays…",
-  "submittedAt": "2026-10-12T09:00:00.000Z",
-  "page": "https://morebumsonseats.com/contact/"
-}
-```
+**One-time activation:** the very first submission makes FormSubmit send an activation email to
+`seoforestaurants@gmail.com`. Click the link in it, and every submission after that arrives as a
+normal email (the reply-to is set to the sender, so you can just hit reply).
 
-For local testing, put the variable in a `.dev.vars` file (git-ignored) and run `npm run preview`.
+To change the recipient, edit `LEADS_EMAIL` in `wrangler.toml` (or override it under
+**Settings → Variables and Secrets** in Cloudflare).
 
 ## Before going live
 
@@ -120,7 +111,7 @@ Some details from the old site were placeholders. Update them in one place each:
 - [ ] Contact email — `src/config/site.ts`
 - [ ] Social profile URLs — `src/config/site.ts`
 - [ ] Testimonial names and venues — `src/data/testimonials.ts`
-- [ ] Set `LEADS_WEBHOOK_URL` in Cloudflare
+- [ ] Send a test enquiry and confirm the FormSubmit activation email
 
 ## Credits
 
