@@ -13,7 +13,11 @@ const MESSAGES = {
   sending: 'Sending…',
   success: 'Thanks! We’ll be in touch soon.',
   error: 'Something went wrong. Please email us at hello@morebumsonseats.com.',
+  // Shown until the inbox owner clicks FormSubmit's one-time activation link.
+  notActivated: 'This form isn’t switched on yet. Please email us at hello@morebumsonseats.com.',
 };
+
+const needsActivation = (message?: string) => /activat/i.test(message ?? '');
 
 export function initLeadForms(): void {
   document.querySelectorAll<HTMLFormElement>('[data-lead-form]').forEach((form) => {
@@ -42,9 +46,8 @@ export function initLeadForms(): void {
           setStatus(MESSAGES.success);
           form.reset();
         } else {
-          // e.g. "This form needs Activation" on the very first submission.
           console.warn('[lead-form]', result.message);
-          setStatus(MESSAGES.error);
+          setStatus(needsActivation(result.message) ? MESSAGES.notActivated : MESSAGES.error);
         }
       } catch (error) {
         console.warn('[lead-form]', error);
