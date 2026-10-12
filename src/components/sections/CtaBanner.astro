@@ -1,8 +1,8 @@
 ---
+import { Image } from 'astro:assets';
+import celebratingOnStool from '@/assets/illustrations/celebrating-on-stool.png';
 import Button from '@/components/ui/Button.astro';
-import UnsplashImage from '@/components/ui/UnsplashImage.astro';
 import { site } from '@/config/site';
-import { images } from '@/data/images';
 
 export interface Props {
   title?: string;
@@ -30,9 +30,15 @@ const {
           Or write to <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
         </p>
       </div>
-      <div class="cta__photos" aria-hidden="true">
-        <UnsplashImage image={images.pizza} width={320} height={400} sizes="200px" widths={[320, 640]} alt="" />
-        <UnsplashImage image={images.steakFrites} width={320} height={400} sizes="200px" widths={[320, 640]} alt="" />
+      <div class="cta__art">
+        <Image
+          src={celebratingOnStool}
+          alt=""
+          widths={[280, 400, 560, 720]}
+          sizes="(max-width: 860px) 260px, 340px"
+          format="webp"
+          quality={80}
+        />
       </div>
     </div>
   </div>
@@ -80,32 +86,29 @@ const {
     text-decoration: underline;
   }
 
-  .cta__photos {
-    position: relative;
-    height: 100%;
-    min-height: 280px;
+  .cta__art {
+    display: grid;
+    place-items: center;
   }
 
-  .cta__photos :global(img) {
-    position: absolute;
-    width: 55%;
-    border-radius: var(--radius-lg);
-    border: 6px solid var(--c-paper);
-    box-shadow: var(--shadow-md);
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
+  .cta__art :global(img) {
+    width: min(340px, 100%);
+    height: auto;
+    filter: drop-shadow(0 18px 22px rgb(12 13 18 / 0.25));
+    animation: sway 5s ease-in-out infinite;
   }
 
-  .cta__photos :global(img:first-child) {
-    left: 5%;
-    top: 0;
-    rotate: -8deg;
+  @keyframes sway {
+    50% {
+      rotate: -3deg;
+      translate: 0 -6px;
+    }
   }
 
-  .cta__photos :global(img:last-child) {
-    right: 5%;
-    bottom: 0;
-    rotate: 7deg;
+  @media (max-width: 860px) {
+    .cta__art :global(img) {
+      width: 260px;
+    }
   }
 
   @media (max-width: 860px) {

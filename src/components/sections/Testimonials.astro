@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import jumpingFriends from '@/assets/illustrations/jumping-friends.png';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
 import UnsplashImage from '@/components/ui/UnsplashImage.astro';
 import { testimonials } from '@/data/testimonials';
@@ -14,7 +16,22 @@ const tones = ['sky', 'lime', 'tomato', 'pink'];
 
 <section class="section" aria-labelledby="testimonials-title">
   <div class="container">
-    <SectionHeading eyebrow="What clients say" title="Slow nights, <em>sorted</em>" align="center" />
+    <div class="quotes-head">
+      <SectionHeading
+        eyebrow="What clients say"
+        title="Slow nights, <em>sorted</em>"
+        lead="Venues that went from quiet midweeks to waiting lists."
+      />
+      <Image
+        src={jumpingFriends}
+        alt=""
+        widths={[240, 360, 480, 640]}
+        sizes="(max-width: 760px) 220px, 300px"
+        format="webp"
+        quality={80}
+        class="quotes-head__art"
+      />
+    </div>
     <ul role="list" class="quotes">
       {
         items.map((t, i) => (
@@ -39,6 +56,44 @@ const tones = ['sky', 'lime', 'tomato', 'pink'];
 </section>
 
 <style>
+  .quotes-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-xl);
+  }
+
+  .quotes-head :global(.quotes-head__art) {
+    flex-shrink: 0;
+    width: clamp(200px, 22vw, 300px);
+    height: auto;
+    margin-bottom: var(--space-lg);
+    filter: drop-shadow(0 16px 20px rgb(12 13 18 / 0.15));
+    animation: hop 3.5s ease-in-out infinite;
+  }
+
+  @keyframes hop {
+    50% {
+      translate: 0 -10px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .quotes-head {
+      flex-direction: column-reverse;
+      align-items: center;
+      text-align: center;
+    }
+
+    .quotes-head :global(.quotes-head__art) {
+      margin-bottom: 0;
+    }
+
+    .quotes-head :global(.section-heading) {
+      justify-items: center;
+    }
+  }
+
   .quotes {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
