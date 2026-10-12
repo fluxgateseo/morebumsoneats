@@ -1,6 +1,7 @@
 ---
 import Button from '@/components/ui/Button.astro';
 import UnsplashImage from '@/components/ui/UnsplashImage.astro';
+import { site } from '@/config/site';
 import { images } from '@/data/images';
 
 export interface Props {
@@ -23,8 +24,11 @@ const {
         <p>{text}</p>
         <div class="cta__actions">
           <Button href="/contact/" variant="ink" withArrow>Book your free audit</Button>
-          <Button href="/services/" variant="outline">See services</Button>
+          <Button href={`mailto:${site.contact.email}`} variant="outline">Email us</Button>
         </div>
+        <p class="cta__email">
+          Or write to <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+        </p>
       </div>
       <div class="cta__photos" aria-hidden="true">
         <UnsplashImage image={images.pizza} width={320} height={400} sizes="200px" widths={[320, 640]} alt="" />
@@ -65,6 +69,15 @@ const {
     flex-wrap: wrap;
     gap: var(--space-sm);
     margin-top: var(--space-sm);
+  }
+
+  .cta__email {
+    font-size: var(--fs-sm);
+  }
+
+  .cta__email a {
+    font-weight: 700;
+    text-decoration: underline;
   }
 
   .cta__photos {

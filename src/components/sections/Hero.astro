@@ -2,6 +2,7 @@
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
 import UnsplashImage from '@/components/ui/UnsplashImage.astro';
+import { site } from '@/config/site';
 import { images } from '@/data/images';
 
 /** Floating "deck" of cards — decorative, so hidden from assistive tech. */
@@ -33,7 +34,7 @@ const center = (cards.length - 1) / 2;
       nights into fully booked evenings.
     </p>
     <div class="hero__actions">
-      <Button href="/services/" variant="glass">Our services</Button>
+      <Button href={`mailto:${site.contact.email}`} variant="glass">Email us</Button>
       <Button href="/contact/" withArrow>Get a free audit</Button>
     </div>
   </div>
