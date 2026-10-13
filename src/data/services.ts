@@ -16,20 +16,31 @@ export const services: Service[] = [
   {
     slug: 'table-filling-campaigns',
     title: 'Table-Filling Campaigns',
-    summary: 'Targeted local campaigns designed to boost your reservations and pack your dining room.',
+    summary: 'Get found on Google and Maps by diners nearby, and turn searches into reservations.',
     description:
-      'Hyper-local paid search, social and maps campaigns aimed at diners within reach of your door — tuned around your quiet nights so every cover counts.',
-    deliverables: ['Local search & Maps ads', 'Geo-targeted social ads', 'Booking-funnel tracking'],
+      'SEO, Google Maps optimisation and Google Ads aimed at diners within reach of your door — tuned around your quiet nights, with every booking and function enquiry tracked so every cover counts.',
+    deliverables: [
+      'SEO (search engine optimisation)',
+      'Google Maps & Business Profile optimisation',
+      'Google Ads',
+      'Booking & function-enquiry funnel tracking',
+    ],
     image: images.diningRoom,
     accent: 'sky',
   },
   {
     slug: 'social-media',
     title: 'Social Media',
-    summary: 'Engaging food content crafted for Instagram and TikTok to attract hungry followers.',
+    summary: 'Content and ads on Instagram, Facebook and TikTok that turn hungry followers into guests.',
     description:
-      'Scroll-stopping reels, menu drops and behind-the-pass stories that turn followers into regulars, planned in monthly content calendars.',
-    deliverables: ['Content calendars', 'Short-form video', 'Community management'],
+      'Scroll-stopping reels, menu drops and behind-the-pass stories, plus paid campaigns on Meta and TikTok aimed at locals — planned in monthly content calendars and built to turn followers into regulars.',
+    deliverables: [
+      'Instagram & Facebook (Meta) ad campaigns',
+      'TikTok campaigns',
+      'Geo-targeted social ads',
+      'Short-form video & content calendars',
+      'Community management',
+    ],
     image: images.pokeBowl,
     accent: 'tomato',
   },
