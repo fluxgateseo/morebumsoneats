@@ -8,7 +8,8 @@ import cafeNate from '@/assets/case-studies/cafe-nate.webp';
 
 /**
  * Client case studies.
- * Figures and client quotes are as published on seoforestaurants.com,
+ * Work delivered with our sister brand, SEO for Restaurants. Figures and
+ * client quotes (excerpted) are as published on seoforestaurants.com,
  * where the full write-ups live (`sourceUrl`).
  */
 export interface Metric {
@@ -66,7 +67,7 @@ export const caseStudies: CaseStudy[] = [
     results:
       'Bookings, calls and takeaway orders climbed sharply as Cosi started ranking for diners across South Yarra and neighbouring suburbs.',
     quote:
-      'Andrea and the SEO for Restaurants team have demonstrated exceptional prowess in their collaboration with Cosi Bar Ristorante. Since the inception of our partnership, phone inquiries, table bookings, and takeaway orders have experienced a remarkable surge.',
+      'Since the inception of our partnership, phone inquiries, table bookings, and takeaway orders have experienced a remarkable surge.',
     author: 'Omar El Deek',
     authorRole: 'Owner, Cosi Bar Ristorante',
     sourceUrl: `${SOURCE}cosi-bar-ristorante-south-yarra/`,
@@ -91,7 +92,7 @@ export const caseStudies: CaseStudy[] = [
     results:
       'Within a year Vaporetto became a go-to for both everyday dining and events, with conversions from the website nearly tripling.',
     quote:
-      'Andrea and the SEO for Restaurants team have demonstrated exceptional expertise in their collaboration with Vaporetto. Since the start of our partnership, we have experienced a notable increase in phone inquiries, table bookings, and takeaway orders.',
+      'Since the start of our partnership, we have experienced a notable increase in phone inquiries, table bookings, and takeaway orders.',
     author: 'Omar El Deek',
     authorRole: 'Owner, Vaporetto',
     sourceUrl: `${SOURCE}vaporetto-hawthorn/`,
@@ -116,7 +117,7 @@ export const caseStudies: CaseStudy[] = [
     results:
       'Calls and bookings almost tripled and the conversion rate grew nearly four-fold, turning far more website visitors into guests.',
     quote:
-      'Andrea and the SEO for Restaurants team have showcased remarkable expertise in their collaboration with Cucinetta. Since the beginning of our partnership, there has been a significant surge in phone inquiries, table bookings, and takeaway orders.',
+      'Since the beginning of our partnership, there has been a significant surge in phone inquiries, table bookings, and takeaway orders.',
     author: 'Omar El Deek',
     authorRole: 'Owner, Cucinetta',
     sourceUrl: `${SOURCE}cucinetta-south-yarra/`,
@@ -141,7 +142,7 @@ export const caseStudies: CaseStudy[] = [
     results:
       'Each location gained 100+ additional bookings a week, with steady growth in revenue and calls.',
     quote:
-      'Andrea and the SEO for Restaurants team have showcased remarkable expertise in their collaboration with 48h Pizza e Gnocchi Bar. Since the beginning of our partnership, we’ve witnessed a significant uptick in phone inquiries, table bookings, and delivery requests.',
+      'Since the beginning of our partnership, we’ve witnessed a significant uptick in phone inquiries, table bookings, and delivery requests.',
     author: 'Michele and Fabio',
     authorRole: 'Owners, 48h Pizza e Gnocchi Bar',
     sourceUrl: `${SOURCE}48h-pizza-e-gnocchi-bar/`,
@@ -166,7 +167,7 @@ export const caseStudies: CaseStudy[] = [
     results:
       'Takeaway surged during lockdown, followed by a big rise in calls and bookings — strong enough that the team cut trading from six to five days a week.',
     quote:
-      'Andrea and the SEO for Restaurants team excelled in their work for Piccolino. Phone inquiries, table bookings, and takeaway orders have surged since our partnership began.',
+      'Phone inquiries, table bookings, and takeaway orders have surged since our partnership began.',
     author: 'Andrea Fioriti',
     authorRole: 'Head Chef & Partner, Piccolino',
     sourceUrl: `${SOURCE}piccolino-pizza-fitzroy-north/`,
@@ -191,7 +192,7 @@ export const caseStudies: CaseStudy[] = [
     results:
       'More locals found the cafe online and turned that interest into visits, lifting revenue in just four months.',
     quote:
-      'Since partnering with Andrea and the SEO for Restaurants team, Cafe Nate has seen a remarkable rise in phone calls, table reservations, and takeout orders. Their expertise in SEO has been instrumental in driving more customers to our door.',
+      '…Cafe Nate has seen a remarkable rise in phone calls, table reservations, and takeout orders. Their expertise in SEO has been instrumental in driving more customers to our door.',
     author: 'Peach',
     authorRole: 'Owner, Cafe Nate',
     sourceUrl: `${SOURCE}cafe-nate/`,

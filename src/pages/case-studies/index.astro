@@ -52,6 +52,10 @@ const jsonLd = graph(
           ))
         }
       </ul>
+      <p class="cs-note">
+        More Bums on Seats is a sister brand of
+        <a href="https://seoforestaurants.com/" rel="noopener">SEO for Restaurants</a>.
+      </p>
     </div>
   </section>
 
@@ -63,6 +67,19 @@ const jsonLd = graph(
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--space-md);
+  }
+
+  .cs-note {
+    margin-top: var(--space-xl);
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+    text-align: center;
+  }
+
+  .cs-note a {
+    color: var(--c-ink);
+    font-weight: 600;
+    text-decoration: underline;
   }
 
   @media (max-width: 1024px) {
