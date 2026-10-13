@@ -32,13 +32,6 @@ export const testimonials: Testimonial[] = [
   },
   {
     quote:
-      'I gotta say, this agency is absolutely amazing when it comes to SEO management for restaurants. They have unparalleled expertise, especially in local SEO…',
-    name: 'Bagusadhy',
-    detail: 'Google review',
-    source: 'google',
-  },
-  {
-    quote:
       'Since the beginning of our partnership, we’ve witnessed a significant uptick in phone inquiries, table bookings, and delivery requests.',
     name: 'Michele & Fabio',
     detail: 'Owners, 48h Pizza e Gnocchi Bar',
