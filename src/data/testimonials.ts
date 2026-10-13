@@ -4,6 +4,7 @@ import micheleFabio from '@/assets/owners/michele-and-fabio.jpg';
 import andrea from '@/assets/owners/andrea-fioriti.jpg';
 import peach from '@/assets/owners/peach.jpg';
 import galih from '@/assets/owners/galih.jpg';
+import fady from '@/assets/owners/fady-ilias.jpg';
 
 /**
  * Real testimonials only, attributed as published:
@@ -46,6 +47,7 @@ export const testimonials: Testimonial[] = [
     name: 'Fady Ilias',
     detail: 'Google review',
     source: 'google',
+    avatar: fady,
   },
   {
     quote: 'Phone inquiries, table bookings, and takeaway orders have surged since our partnership began.',
