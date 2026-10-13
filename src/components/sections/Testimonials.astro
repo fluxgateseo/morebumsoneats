@@ -1,161 +1,254 @@
 ---
+/**
+ * Rotating testimonial wall: two rows of real client quotes and Google
+ * reviews scrolling in opposite directions (pauses on hover/focus).
+ */
 import { Image } from 'astro:assets';
-import jumpingFriends from '@/assets/illustrations/jumping-friends.png';
-import SectionHeading from '@/components/ui/SectionHeading.astro';
-import UnsplashImage from '@/components/ui/UnsplashImage.astro';
-import { testimonials } from '@/data/testimonials';
+import Icon from '@/components/ui/Icon.astro';
+import { testimonials, type Testimonial } from '@/data/testimonials';
 
-export interface Props {
-  limit?: number;
-}
-
-const { limit = 3 } = Astro.props;
-const items = testimonials.slice(0, limit);
-const tones = ['sky', 'lime', 'tomato', 'pink'];
+const half = Math.ceil(testimonials.length / 2);
+const rows: Testimonial[][] = [testimonials.slice(0, half), testimonials.slice(half)];
+const initials = (name: string) =>
+  name
+    .split(/\s|&/)
+    .filter(Boolean)
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
 ---
 
-<section class="section" aria-labelledby="testimonials-title">
-  <div class="container">
-    <div class="quotes-head">
-      <SectionHeading
-        eyebrow="What clients say"
-        title="Slow nights, <em>sorted</em>"
-        lead="Venues that went from quiet midweeks to waiting lists."
-      />
-      <Image
-        src={jumpingFriends}
-        alt=""
-        widths={[240, 360, 480, 640]}
-        sizes="(max-width: 760px) 220px, 300px"
-        format="webp"
-        quality={80}
-        class="quotes-head__art"
-      />
-    </div>
-    <ul role="list" class="quotes">
-      {
-        items.map((t, i) => (
-          <li class:list={['quote', `quote--${tones[i % tones.length]}`]} data-reveal style={`--reveal-delay:${i * 0.1}s`}>
-            <figure>
-              <blockquote>
-                <p>“{t.quote}”</p>
-              </blockquote>
-              <figcaption class="quote__author">
-                <UnsplashImage image={t.avatar} width={96} height={96} sizes="48px" widths={[96]} alt="" />
-                <span>
-                  <strong>{t.name}</strong>
-                  <span class="quote__role">{t.role}</span>
-                </span>
-              </figcaption>
-            </figure>
-          </li>
-        ))
-      }
+<section class="reviews" aria-labelledby="testimonials-title">
+  <div class="reviews__head container">
+    <h2 id="testimonials-title" class="reviews__title">See why venues love <span>working with us</span></h2>
+    <ul role="list" class="reviews__badges">
+      <li><Icon name="check" size={16} /> Hospitality-only specialists</li>
+      <li><Icon name="chart" size={16} /> Results published in real case studies</li>
     </ul>
   </div>
+
+  {
+    rows.map((row, r) => (
+      <div class:list={['reviews__row', { 'reviews__row--reverse': r === 1 }]}>
+        <ul role="list" class="reviews__track">
+          {[...row, ...row].map((t, i) => {
+            const hidden = i >= row.length;
+            return (
+              <li class="review" aria-hidden={hidden ? 'true' : undefined}>
+                <figure>
+                  {t.source === 'google' && (
+                    <p class="review__stars" aria-label={hidden ? undefined : '5 out of 5 stars on Google'}>
+                      ★★★★★
+                    </p>
+                  )}
+                  <blockquote class="review__quote">
+                    <p>“{t.quote}”</p>
+                  </blockquote>
+                  <figcaption class="review__author">
+                    {t.avatar ? (
+                      <Image src={t.avatar} alt="" width={96} height={96} format="webp" class="review__avatar" />
+                    ) : (
+                      <span class="review__avatar review__avatar--initials" aria-hidden="true">
+                        {initials(t.name)}
+                      </span>
+                    )}
+                    <span>
+                      <strong>{t.name}</strong>
+                      <span class="review__detail">
+                        {t.caseStudy && !hidden ? (
+                          <a href={`/case-studies/${t.caseStudy}/`}>{t.detail}</a>
+                        ) : (
+                          t.detail
+                        )}
+                      </span>
+                    </span>
+                  </figcaption>
+                </figure>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    ))
+  }
+
+  <p class="reviews__note container">
+    Google reviews are of our sister brand, SEO for Restaurants. Client quotes are from our case studies.
+  </p>
 </section>
 
 <style>
-  .quotes-head {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--space-xl);
+  .reviews {
+    margin: 0.5rem;
+    padding-block: var(--space-2xl);
+    border-radius: var(--radius-xl);
+    background:
+      radial-gradient(60% 50% at 85% 0%, rgb(215 247 91 / 0.45), transparent 70%),
+      linear-gradient(160deg, var(--c-sky-700), var(--c-sky) 55%, var(--c-sky-300));
+    color: var(--c-paper);
+    overflow: hidden;
   }
 
-  .quotes-head :global(.quotes-head__art) {
-    flex-shrink: 0;
-    width: clamp(200px, 22vw, 300px);
-    height: auto;
-    margin-bottom: var(--space-lg);
-    filter: drop-shadow(0 16px 20px rgb(12 13 18 / 0.15));
-    animation: hop 3.5s ease-in-out infinite;
-  }
-
-  @keyframes hop {
-    50% {
-      translate: 0 -10px;
-    }
-  }
-
-  @media (max-width: 760px) {
-    .quotes-head {
-      flex-direction: column-reverse;
-      align-items: center;
-      text-align: center;
-    }
-
-    .quotes-head :global(.quotes-head__art) {
-      margin-bottom: 0;
-    }
-
-    .quotes-head :global(.section-heading) {
-      justify-items: center;
-    }
-  }
-
-  .quotes {
+  .reviews__head {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-    gap: var(--space-md);
+    justify-items: center;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+    text-align: center;
   }
 
-  .quote {
-    padding: var(--space-xl) var(--space-lg) var(--space-lg);
-    border-radius: var(--radius-lg);
+  .reviews__title {
+    max-width: 16ch;
+    font-size: var(--fs-4xl);
+    font-weight: 600;
   }
 
-  .quote figure {
+  .reviews__title span {
+    color: var(--c-lime);
+  }
+
+  .reviews__badges {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: var(--space-xl);
-    height: 100%;
-  }
-
-  .quote blockquote {
-    font-family: var(--font-display);
-    font-size: var(--fs-xl);
-    font-weight: 500;
-    line-height: 1.25;
-    letter-spacing: -0.02em;
-  }
-
-  .quote--sky {
-    background: var(--c-sky);
-    color: var(--c-paper);
-  }
-  .quote--lime {
-    background: var(--c-lime);
-  }
-  .quote--tomato {
-    background: var(--c-tomato);
-    color: var(--c-paper);
-  }
-  .quote--pink {
-    background: var(--c-pink);
-  }
-
-  .quote__author {
-    display: flex;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: var(--space-sm);
+  }
+
+  .reviews__badges li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-md);
+    background: rgb(12 13 18 / 0.25);
+    font-weight: 600;
     font-size: var(--fs-sm);
   }
 
-  .quote__author :global(img) {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid currentColor;
+  .reviews__badges :global(.icon) {
+    color: var(--c-lime);
   }
 
-  .quote__author > span {
+  .reviews__row {
+    overflow: hidden;
+  }
+
+  .reviews__row + .reviews__row {
+    margin-top: var(--space-sm);
+  }
+
+  .reviews__track {
+    --gap: var(--space-sm);
+    display: flex;
+    gap: var(--gap);
+    width: max-content;
+    animation: reviews-scroll 70s linear infinite;
+  }
+
+  .reviews__row--reverse .reviews__track {
+    animation-direction: reverse;
+    animation-duration: 80s;
+  }
+
+  .reviews__row:hover .reviews__track,
+  .reviews__row:focus-within .reviews__track {
+    animation-play-state: paused;
+  }
+
+  @keyframes reviews-scroll {
+    to {
+      transform: translateX(calc(-50% - var(--gap) / 2));
+    }
+  }
+
+  .review {
+    flex-shrink: 0;
+    width: clamp(260px, 26vw, 360px);
+  }
+
+  .review figure {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    height: 100%;
+    min-height: 240px;
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    background: #eef6ff;
+    color: var(--c-ink);
+  }
+
+  .review:nth-child(3n + 2) figure {
+    background: #f4fcd6;
+  }
+
+  .review__stars {
+    color: var(--c-ink);
+    letter-spacing: 0.15em;
+  }
+
+  .review__quote {
+    flex: 1;
+    font-size: var(--fs-lg);
+    line-height: 1.45;
+  }
+
+  .review__author {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .review__author > span {
     display: grid;
+    font-size: var(--fs-sm);
   }
 
-  .quote__role {
-    opacity: 0.8;
+  .review :global(.review__avatar) {
+    flex-shrink: 0;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+  }
+
+  .review__avatar--initials {
+    display: grid;
+    place-items: center;
+    background: var(--c-ink);
+    color: var(--c-lime);
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+
+  .review__detail {
+    color: var(--c-muted);
+  }
+
+  .review__detail a {
+    text-decoration: underline;
+  }
+
+  .reviews__note {
+    margin-top: var(--space-lg);
+    font-size: var(--fs-xs);
+    text-align: center;
+    color: rgb(255 255 255 / 0.75);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reviews__row {
+      overflow-x: auto;
+    }
+
+    .reviews__track {
+      animation: none;
+      padding-inline: var(--gutter);
+    }
+
+    .review[aria-hidden='true'] {
+      display: none;
+    }
   }
 </style>

@@ -2,9 +2,11 @@
 import Icon from '@/components/ui/Icon.astro';
 import UnsplashImage from '@/components/ui/UnsplashImage.astro';
 import { images } from '@/data/images';
+import { Image } from 'astro:assets';
 import { testimonials } from '@/data/testimonials';
 
-const avatars = [images.portraitA, images.portraitB, images.portraitC, images.portraitD];
+// Real client owners only — no stock faces next to client quotes.
+const avatars = [...new Set(testimonials.map((t) => t.avatar).filter((a) => a !== undefined))];
 const featured = testimonials[0];
 ---
 
@@ -20,8 +22,8 @@ const featured = testimonials[0];
       />
       <span class="tile__badge"><Icon name="chart" size={18} /></span>
       <div class="tile__card">
-        <p class="tile__number">40%</p>
-        <p>More bookings in three months for one of our dining clients.</p>
+        <p class="tile__number">+44%</p>
+        <p>Revenue growth for <a href="/case-studies/cosi-bar-ristorante/">Cosi Bar Ristorante</a> in South Yarra.</p>
       </div>
     </article>
 
@@ -32,12 +34,15 @@ const featured = testimonials[0];
         {
           avatars.map((avatar) => (
             <li>
-              <UnsplashImage image={avatar} width={64} height={64} sizes="40px" widths={[64, 128]} alt="" />
+              <Image src={avatar} alt="" width={64} height={64} format="webp" />
             </li>
           ))
         }
       </ul>
-      <blockquote class="tile__quote">“{featured.quote}”</blockquote>
+      <figure class="tile__quote">
+        <blockquote>“{featured.quote}”</blockquote>
+        <figcaption>— {featured.name}, {featured.detail}</figcaption>
+      </figure>
     </article>
 
     <div class="tile-stack">
@@ -129,6 +134,11 @@ const featured = testimonials[0];
     font-size: var(--fs-sm);
   }
 
+  .tile__card a {
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
   .tile--cloud {
     background: var(--c-cloud);
   }
@@ -151,7 +161,13 @@ const featured = testimonials[0];
   }
 
   .tile__quote {
+    display: grid;
+    gap: 0.35rem;
     font-size: var(--fs-sm);
+  }
+
+  .tile__quote figcaption {
+    color: var(--c-muted);
   }
 
   .tile-stack {

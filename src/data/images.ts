@@ -37,8 +37,4 @@ export const images = {
   burgerBeer: image('1550547660-d9450f859349', 'Burgers served with cold drinks'),
   brunchSpread: image('1424847651672-bf20a4b0982b', 'Brunch spread of waffles and plates seen from above'),
   openKitchen: image('1556910103-1c02745aae4d', 'Two cooks smiling in an open kitchen'),
-  portraitA: image('1494790108377-be9c29b29330', 'Portrait of a smiling restaurant owner'),
-  portraitB: image('1507003211169-0a1dd7228f2d', 'Portrait of a smiling bar manager'),
-  portraitC: image('1438761681033-6461ffad8d80', 'Portrait of a café owner'),
-  portraitD: image('1500648767791-00dcc994a43e', 'Portrait of a restaurant general manager'),
 } satisfies Record<string, SiteImage>;
