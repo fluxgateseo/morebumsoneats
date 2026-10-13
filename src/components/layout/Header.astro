@@ -98,6 +98,7 @@ const isActive = (href: string) => (href === '/' ? currentPath === '/' : current
 
   .site-nav__link {
     position: relative;
+    white-space: nowrap;
     font-family: var(--font-mono);
     font-size: var(--fs-xs);
     letter-spacing: 0.14em;
@@ -144,7 +145,7 @@ const isActive = (href: string) => (href === '/' ? currentPath === '/' : current
     display: block;
   }
 
-  @media (max-width: 860px) {
+  @media (max-width: 1080px) {
     .site-header__toggle {
       display: grid;
     }
