@@ -1,0 +1,90 @@
+---
+import Button from '@/components/ui/Button.astro';
+import OwnerStories from './OwnerStories.astro';
+import { site } from '@/config/site';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__sky" aria-hidden="true"></div>
+
+  <div class="hero__content container">
+    <p class="eyebrow hero__eyebrow">Restaurant &amp; hospitality marketing</p>
+    <h1 id="hero-title" class="hero__title">
+      Fill more tables.<br /><span>Grow your revenue.</span>
+    </h1>
+    <p class="hero__lead">
+      Smart, tailored marketing for restaurants, bars and dining venues — campaigns that turn quiet
+      nights into fully booked evenings.
+    </p>
+    <div class="hero__actions">
+      <Button href={`mailto:${site.contact.email}`} variant="glass">Email us</Button>
+      <Button href="/contact/" withArrow>Get a free audit</Button>
+    </div>
+  </div>
+
+  <OwnerStories />
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    margin: 0.5rem;
+    padding-top: clamp(8.5rem, 14vw, 12rem);
+    padding-bottom: var(--space-2xl);
+    border-radius: var(--radius-xl);
+    color: var(--c-paper);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Sky gradient + soft clouds */
+  .hero__sky {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(60% 40% at 15% 100%, rgb(255 255 255 / 0.95), transparent 70%),
+      radial-gradient(45% 30% at 55% 105%, rgb(255 255 255 / 0.9), transparent 70%),
+      radial-gradient(50% 35% at 95% 95%, rgb(255 255 255 / 0.85), transparent 70%),
+      radial-gradient(30% 18% at 80% 62%, rgb(255 255 255 / 0.35), transparent 70%),
+      radial-gradient(28% 14% at 8% 55%, rgb(255 255 255 / 0.4), transparent 70%),
+      linear-gradient(180deg, var(--c-sky-700) 0%, var(--c-sky) 40%, var(--c-sky-300) 78%, var(--c-sky-100) 100%);
+  }
+
+  .hero__content {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    gap: var(--space-lg);
+  }
+
+  .hero__eyebrow {
+    max-width: 100%;
+    padding: 0.4rem 0.9rem;
+    font-size: clamp(0.625rem, 0.55rem + 0.3vw, 0.75rem);
+    border-radius: var(--radius-pill);
+    background: rgb(255 255 255 / 0.15);
+    backdrop-filter: blur(6px);
+  }
+
+  .hero__title {
+    font-size: var(--fs-4xl);
+    font-weight: 600;
+  }
+
+  .hero__title span {
+    color: var(--c-lime);
+  }
+
+  .hero__lead {
+    max-width: 52ch;
+    color: rgb(255 255 255 / 0.88);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-sm);
+  }
+</style>

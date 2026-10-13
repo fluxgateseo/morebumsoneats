@@ -1,0 +1,95 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { faqs } from '@/data/faqs';
+---
+
+<section class="section" aria-labelledby="faq-title">
+  <div class="container faq">
+    <SectionHeading eyebrow="FAQ" title="Questions, <em>answered</em>" />
+    <div class="faq__list">
+      {
+        faqs.map((faq, i) => (
+          <details class="faq__item" name="faq" open={i === 0}>
+            <summary>
+              <h3 class="faq__q">{faq.question}</h3>
+              <span class="faq__icon" aria-hidden="true">
+                <Icon name="plus" size={18} />
+              </span>
+            </summary>
+            <p class="faq__a">{faq.answer}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: var(--space-xl);
+  }
+
+  .faq__list {
+    display: grid;
+    gap: var(--space-sm);
+  }
+
+  .faq__item {
+    border-radius: var(--radius-md);
+    background: var(--c-cloud);
+    transition: background-color 0.3s;
+  }
+
+  .faq__item[open] {
+    background: var(--c-sky-100);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__q {
+    font-size: var(--fs-lg);
+    letter-spacing: -0.02em;
+  }
+
+  .faq__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: var(--c-ink);
+    color: var(--c-lime);
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .faq__item[open] .faq__icon {
+    transform: rotate(45deg);
+  }
+
+  .faq__a {
+    padding: 0 var(--space-lg) var(--space-lg);
+    color: var(--c-ink-soft);
+  }
+
+  @media (max-width: 860px) {
+    .faq {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

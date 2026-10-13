@@ -1,0 +1,131 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import UnsplashImage from '@/components/ui/UnsplashImage.astro';
+import { images } from '@/data/images';
+import { process } from '@/data/highlights';
+
+const colors = ['var(--c-sky)', 'var(--c-tomato)', 'var(--c-lime)', 'var(--c-pink)'];
+---
+
+<section class="process section" aria-labelledby="process-title">
+  <div class="container process__grid">
+    <div class="process__media" data-reveal>
+      <UnsplashImage
+        image={images.openKitchen}
+        width={720}
+        height={820}
+        sizes="(max-width: 900px) 100vw, 45vw"
+      />
+      <div class="process__sticker">
+        <span>From quiet</span>
+        <strong>to queue</strong>
+      </div>
+    </div>
+
+    <div>
+      <SectionHeading
+        eyebrow="How it works"
+        title="A simple recipe for <em>busier nights</em>"
+        lead="No jargon, no lock-ins — just a clear plan, built around your venue, that we measure in bookings."
+      />
+      <ol role="list" class="steps">
+        {
+          process.map((step, i) => (
+            <li class="step" data-reveal style={`--dot:${colors[i % colors.length]};--reveal-delay:${i * 0.08}s`}>
+              <span class="step__num">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3 class="step__title">{step.title}</h3>
+                <p class="text-muted">{step.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .process {
+    margin: 0.5rem;
+    border-radius: var(--radius-xl);
+    background: var(--c-cloud);
+  }
+
+  .process__grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  .process__media {
+    position: relative;
+  }
+
+  .process__media :global(img) {
+    width: 100%;
+    border-radius: var(--radius-xl);
+    aspect-ratio: 72 / 82;
+    object-fit: cover;
+  }
+
+  .process__sticker {
+    position: absolute;
+    right: -1rem;
+    bottom: 2rem;
+    display: grid;
+    padding: 1rem 1.4rem;
+    border-radius: var(--radius-md);
+    background: var(--c-lime);
+    font-family: var(--font-display);
+    line-height: 1.05;
+    rotate: -5deg;
+    box-shadow: var(--shadow-md);
+  }
+
+  .process__sticker strong {
+    font-size: var(--fs-2xl);
+  }
+
+  .steps {
+    display: grid;
+    gap: var(--space-sm);
+  }
+
+  .step {
+    display: flex;
+    gap: var(--space-lg);
+    align-items: flex-start;
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    background: var(--c-paper);
+  }
+
+  .step__num {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: var(--dot);
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+
+  .step__title {
+    font-size: var(--fs-xl);
+    margin-bottom: 0.2rem;
+  }
+
+  @media (max-width: 900px) {
+    .process__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .process__sticker {
+      right: 1rem;
+    }
+  }
+</style>

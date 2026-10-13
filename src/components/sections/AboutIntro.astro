@@ -1,0 +1,65 @@
+---
+import UnsplashImage from '@/components/ui/UnsplashImage.astro';
+import { images } from '@/data/images';
+---
+
+<section class="intro section" aria-labelledby="intro-title">
+  <div class="container intro__inner" data-reveal>
+    <p class="eyebrow">About us</p>
+    <h2 id="intro-title" class="intro__title">
+      A hospitality marketing partner dedicated to filling
+      <span class="pill pill--sky"><UnsplashImage image={images.diningRoom} width={120} height={72} sizes="120px" widths={[120, 240]} /></span>
+      every table <span class="muted">and making your venue</span>
+      <span class="pill pill--lime"><UnsplashImage image={images.cocktails} width={120} height={72} sizes="120px" widths={[120, 240]} /></span>
+      <span class="muted">the place to be.</span>
+    </h2>
+  </div>
+</section>
+
+<style>
+  .intro__inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-lg);
+    text-align: center;
+  }
+
+  .intro__title {
+    max-width: 22ch;
+    font-size: var(--fs-3xl);
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .muted {
+    color: var(--c-muted);
+  }
+
+  .pill {
+    display: inline-block;
+    vertical-align: middle;
+    width: 1.9em;
+    height: 1.1em;
+    margin-inline: 0.1em;
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    border: 3px solid;
+    transform: translateY(-0.06em);
+  }
+
+  .pill--sky {
+    border-color: var(--c-sky-300);
+    rotate: -4deg;
+  }
+
+  .pill--lime {
+    border-color: var(--c-lime);
+    rotate: 4deg;
+  }
+
+  .pill :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

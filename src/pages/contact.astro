@@ -1,0 +1,137 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/sections/PageHero.astro';
+import ContactForm from '@/components/forms/ContactForm.astro';
+import Icon from '@/components/ui/Icon.astro';
+import UnsplashImage from '@/components/ui/UnsplashImage.astro';
+import { site } from '@/config/site';
+import { images } from '@/data/images';
+import { breadcrumbSchema, graph, organizationSchema, webPageSchema } from '@/lib/schema';
+
+const description =
+  'Get in touch with More Bums on Seats. Book a free restaurant marketing audit and find out how to bring more diners through your doors.';
+
+const jsonLd = graph(
+  webPageSchema('ContactPage', { name: 'Contact More Bums on Seats', path: '/contact/', description }),
+  organizationSchema(),
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Contact', path: '/contact/' },
+  ]),
+);
+---
+
+<BaseLayout title="Contact Us" description={description} ogImage={images.coffee.id} jsonLd={jsonLd}>
+  <PageHero
+    eyebrow="Contact"
+    title="Let’s get you <span>fully booked</span>"
+    lead="Let’s chat about how to bring more diners through your doors. Tell us about your venue and we’ll come back with ideas — and a free audit."
+    tone="ink"
+  />
+
+  <section class="section" aria-label="Contact form and details">
+    <div class="container contact">
+      <div class="contact__form" data-reveal>
+        <h2 class="contact__title">Get in touch</h2>
+        <p class="text-muted">We usually reply within one working day.</p>
+        <ContactForm />
+      </div>
+
+      <aside class="contact__aside" data-reveal style="--reveal-delay: 0.1s">
+        <div class="card card--lime">
+          <h2 class="card__title">Prefer email?</h2>
+          <p>Drop us a line and tell us about your venue.</p>
+          <a href={`mailto:${site.contact.email}`} class="card__link">
+            <Icon name="mail" />
+            {site.contact.email}
+          </a>
+        </div>
+        <div class="card card--photo">
+          <UnsplashImage image={images.coffee} width={560} height={420} sizes="(max-width: 860px) 100vw, 35vw" />
+          <p class="card__caption">Coffee’s on us at your strategy session.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  .contact__form {
+    display: grid;
+    gap: var(--space-md);
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border-radius: var(--radius-xl);
+    background: var(--c-cloud);
+  }
+
+  .contact__title {
+    font-size: var(--fs-2xl);
+  }
+
+  .contact__aside {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .card {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .card--lime {
+    display: grid;
+    gap: var(--space-md);
+    padding: var(--space-xl) var(--space-lg);
+    background: var(--c-lime);
+  }
+
+  .card__title {
+    font-size: var(--fs-xl);
+  }
+
+  .card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-weight: 600;
+    word-break: break-all;
+  }
+
+  .card__link:hover {
+    text-decoration: underline;
+  }
+
+  .card--photo {
+    position: relative;
+  }
+
+  .card--photo :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .card__caption {
+    position: absolute;
+    left: var(--space-md);
+    bottom: var(--space-md);
+    padding: 0.4rem 0.9rem;
+    border-radius: var(--radius-pill);
+    background: var(--c-paper);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+  }
+
+  @media (max-width: 860px) {
+    .contact {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

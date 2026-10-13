@@ -1,0 +1,185 @@
+---
+import Logo from '@/components/ui/Logo.astro';
+import Icon, { type IconName } from '@/components/ui/Icon.astro';
+import NewsletterForm from '@/components/forms/NewsletterForm.astro';
+import { site } from '@/config/site';
+import { legalNav, mainNav } from '@/data/navigation';
+
+const socials: { name: string; icon: IconName; href: string }[] = [
+  { name: 'Facebook', icon: 'facebook', href: site.social.facebook },
+  { name: 'Instagram', icon: 'instagram', href: site.social.instagram },
+  { name: 'X', icon: 'x', href: site.social.x },
+  { name: 'TikTok', icon: 'tiktok', href: site.social.tiktok },
+];
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div class="site-footer__brand stack">
+        <Logo width={240} class="site-footer__logo" />
+        <p class="text-dim">
+          Restaurant marketing that fills tables, packs bars and grows revenue — seven nights a week.
+        </p>
+        <ul role="list" class="socials">
+          {
+            socials.map((s) => (
+              <li>
+                <a href={s.href} target="_blank" rel="noopener noreferrer" class="socials__link">
+                  <Icon name={s.icon} size={18} label={s.name} />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <nav aria-label="Footer" class="site-footer__col">
+        <h2 class="site-footer__title">Explore</h2>
+        <ul role="list" class="stack" style="--stack-gap: 0.4rem">
+          {mainNav.map((item) => <li><a href={item.href} class="site-footer__link">{item.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <div class="site-footer__col">
+        <h2 class="site-footer__title">Contact</h2>
+        <address class="stack" style="--stack-gap: 0.4rem">
+          <a href={`mailto:${site.contact.email}`} class="site-footer__link">{site.contact.email}</a>
+        </address>
+      </div>
+
+      <div class="site-footer__col site-footer__news">
+        <h2 class="site-footer__title">Fresh tips, monthly</h2>
+        <p class="text-dim">Marketing ideas that fill your seats and boost your revenue.</p>
+        <NewsletterForm id="footer-newsletter" />
+      </div>
+    </div>
+
+    <p class="site-footer__wordmark" aria-hidden="true">more bums on seats</p>
+
+    <div class="site-footer__bottom">
+      <p>&copy; {year} {site.name}. All rights reserved.</p>
+      <ul role="list" class="site-footer__legal">
+        {legalNav.map((item) => <li><a href={item.href} class="site-footer__link">{item.label}</a></li>)}
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin: 0.5rem;
+    padding-top: var(--space-2xl);
+    border-radius: var(--radius-xl);
+    background: var(--c-ink);
+    color: var(--c-paper);
+    overflow: hidden;
+  }
+
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 0.8fr 1fr 1.6fr;
+    gap: var(--space-xl);
+  }
+
+  .text-dim {
+    color: rgb(255 255 255 / 0.65);
+    font-size: var(--fs-sm);
+  }
+
+  .site-footer :global(.site-footer__logo) {
+    --logo-width: 220px;
+  }
+
+  .site-footer__title {
+    margin-bottom: var(--space-md);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-lime);
+  }
+
+  .site-footer__news .text-dim {
+    margin-bottom: var(--space-md);
+  }
+
+  address {
+    font-style: normal;
+  }
+
+  .site-footer__link {
+    display: inline-block;
+    transition: color 0.2s;
+  }
+
+  .site-footer__link:hover {
+    color: var(--c-lime);
+  }
+
+  .socials {
+    display: flex;
+    gap: var(--space-xs);
+  }
+
+  .socials__link {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 1px solid rgb(255 255 255 / 0.2);
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+
+  .socials__link:hover {
+    background: var(--c-lime);
+    color: var(--c-ink);
+  }
+
+  .site-footer__wordmark {
+    margin-top: var(--space-2xl);
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 8.6vw, 7.75rem);
+    font-weight: 800;
+    line-height: 0.85;
+    letter-spacing: -0.06em;
+    white-space: nowrap;
+    color: var(--c-paper);
+    text-align: center;
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding-block: var(--space-lg);
+    margin-top: var(--space-lg);
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+    font-size: var(--fs-sm);
+    color: rgb(255 255 255 / 0.6);
+  }
+
+  .site-footer__legal {
+    display: flex;
+    gap: var(--space-lg);
+  }
+
+  @media (max-width: 960px) {
+    .site-footer__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .site-footer__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

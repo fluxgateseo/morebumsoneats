@@ -1,0 +1,48 @@
+---
+/**
+ * Responsive <img> served from the Unsplash CDN.
+ * Width/height attributes are always set to prevent layout shift (CLS).
+ */
+import type { SiteImage } from '@/data/images';
+import { unsplashSrcset, unsplashUrl } from '@/lib/unsplash';
+
+export interface Props {
+  image: SiteImage;
+  width: number;
+  height: number;
+  sizes?: string;
+  widths?: number[];
+  loading?: 'lazy' | 'eager';
+  fetchpriority?: 'high' | 'low' | 'auto';
+  alt?: string;
+  class?: string;
+}
+
+const {
+  image,
+  width,
+  height,
+  sizes = '100vw',
+  widths = [320, 480, 640, 960, 1280],
+  loading = 'lazy',
+  fetchpriority = 'auto',
+  alt = image.alt,
+  class: className,
+} = Astro.props;
+
+const ratio = width / height;
+const usableWidths = widths.filter((w) => w <= width * 2);
+---
+
+<img
+  src={unsplashUrl(image.id, { width, height })}
+  srcset={unsplashSrcset(image.id, usableWidths.length ? usableWidths : [width], ratio)}
+  sizes={sizes}
+  width={width}
+  height={height}
+  alt={alt}
+  loading={loading}
+  decoding={loading === 'eager' ? 'sync' : 'async'}
+  fetchpriority={fetchpriority}
+  class={className}
+/>

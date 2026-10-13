@@ -1,0 +1,257 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/sections/PageHero.astro';
+import CaseStudyCard from '@/components/sections/CaseStudyCard.astro';
+import CtaBanner from '@/components/sections/CtaBanner.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import UnsplashImage from '@/components/ui/UnsplashImage.astro';
+import { caseStudies } from '@/data/case-studies';
+import { images } from '@/data/images';
+import { differentiators, stats } from '@/data/why-us';
+import { breadcrumbSchema, graph, organizationSchema, webPageSchema } from '@/lib/schema';
+
+const description =
+  'Why restaurants choose More Bums on Seats: hospitality-only specialists, a dedicated senior strategist, ethical local SEO and transparent reporting tied to bookings and revenue.';
+
+const jsonLd = graph(
+  webPageSchema('WebPage', { name: 'Why choose More Bums on Seats', path: '/why-us/', description }),
+  organizationSchema(),
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Why Us', path: '/why-us/' },
+  ]),
+);
+
+const statTones = ['sky', 'lime', 'tomato'];
+const cardTones = ['var(--c-sky-100)', 'var(--c-lime)', 'var(--c-pink)', 'var(--c-sun)', 'var(--c-cloud)', 'var(--c-sky-100)'];
+const featured = caseStudies.slice(0, 3);
+---
+
+<BaseLayout title="Why Us" description={description} ogImage={images.fineDining.id} jsonLd={jsonLd}>
+  <PageHero
+    eyebrow="Why Us"
+    title="Why restaurants <span>choose us</span>"
+    lead="Discover what sets us apart as the digital marketing partner built for restaurants, bars and cafés."
+    image={images.fineDining}
+  >
+    <Button href="/contact/" withArrow>Book a free strategy session</Button>
+  </PageHero>
+
+  <section class="section" aria-labelledby="specialised-title">
+    <div class="container intro">
+      <div class="intro__media" data-reveal>
+        <UnsplashImage image={images.chef} width={640} height={720} sizes="(max-width: 860px) 100vw, 45vw" />
+      </div>
+      <div class="intro__copy">
+        <SectionHeading eyebrow="Our focus" title="Specialised in <em>restaurant excellence</em>" />
+        <div class="stack lead">
+          <p>
+            More Bums on Seats is a boutique marketing agency dedicated exclusively to food and hospitality. We
+            help restaurants, cafés and bars build a commanding online presence that turns into measurable
+            revenue growth.
+          </p>
+          <p>
+            Our team pairs seasoned digital marketers with people who genuinely love the restaurant industry —
+            so we understand covers, table turns and quiet Tuesdays as well as rankings and clicks.
+          </p>
+        </div>
+        <Button href="/contact/" variant="ink" withArrow>Book a free strategy session</Button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section results" aria-labelledby="results-title">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Transparency"
+        title="Results you can <em>trust</em>"
+        lead="Clear, straightforward reporting that connects our work directly to your bookings and revenue. Accountability drives excellence — and our reporting proves it."
+      />
+      <ul role="list" class="stats">
+        {
+          stats.map((stat, i) => (
+            <li class:list={['stat', `stat--${statTones[i]}`]} data-reveal style={`--reveal-delay:${i * 0.08}s`}>
+              <p class="stat__value">{stat.value}</p>
+              <p class="stat__label">{stat.label}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="apart-title">
+    <div class="container">
+      <SectionHeading eyebrow="What sets us apart" title="Six reasons venues <em>stay with us</em>" align="center" />
+      <ul role="list" class="apart">
+        {
+          differentiators.map((item, i) => (
+            <li class="apart__card" style={`--tone:${cardTones[i]};--reveal-delay:${(i % 3) * 0.08}s`} data-reveal>
+              <span class="apart__icon" aria-hidden="true"><Icon name={item.icon} size={22} /></span>
+              <h3 class="apart__title">{item.title}</h3>
+              <p>{item.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section proof" aria-labelledby="proof-title">
+    <div class="container">
+      <div class="proof__head">
+        <SectionHeading eyebrow="Proof" title="Results from <em>real venues</em>" />
+        <Button href="/case-studies/" variant="outline" withArrow>All case studies</Button>
+      </div>
+      <ul role="list" class="proof__grid">
+        {featured.map((study, i) => <li><CaseStudyCard study={study} tone={(['sky', 'lime', 'tomato'] as const)[i]} /></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBanner title="Ready to work with restaurant specialists?" />
+</BaseLayout>
+
+<style>
+  .intro {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  .intro__media :global(img) {
+    width: 100%;
+    aspect-ratio: 64 / 72;
+    object-fit: cover;
+    border-radius: var(--radius-xl);
+  }
+
+  .intro__copy {
+    display: grid;
+    gap: var(--space-lg);
+    justify-items: start;
+  }
+
+  .intro__copy :global(.section-heading) {
+    margin-bottom: 0;
+  }
+
+  .results {
+    margin: 0.5rem;
+    border-radius: var(--radius-xl);
+    background: var(--c-ink);
+    color: var(--c-paper);
+  }
+
+  .results :global(.lead),
+  .results :global(.section-heading__title em) {
+    color: rgb(255 255 255 / 0.7);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+
+  .stat {
+    display: grid;
+    gap: var(--space-xs);
+    padding: var(--space-xl) var(--space-lg);
+    border-radius: var(--radius-lg);
+  }
+
+  .stat--sky {
+    background: var(--c-sky);
+  }
+  .stat--lime {
+    background: var(--c-lime);
+    color: var(--c-ink);
+  }
+  .stat--tomato {
+    background: var(--c-tomato);
+  }
+
+  .stat__value {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 2rem + 4vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  .stat__label {
+    font-weight: 600;
+  }
+
+  .apart {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+
+  .apart__card {
+    display: grid;
+    align-content: start;
+    gap: var(--space-sm);
+    padding: var(--space-xl) var(--space-lg);
+    border-radius: var(--radius-lg);
+    background: var(--tone);
+  }
+
+  .apart__icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: var(--space-xs);
+    border-radius: 50%;
+    background: var(--c-ink);
+    color: var(--c-lime);
+  }
+
+  .apart__title {
+    font-size: var(--fs-xl);
+  }
+
+  .apart__card p {
+    color: var(--c-ink-soft);
+  }
+
+  .proof__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+  }
+
+  .proof__head :global(.section-heading) {
+    margin-bottom: 0;
+  }
+
+  .proof__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+
+  @media (max-width: 960px) {
+    .intro,
+    .stats,
+    .apart,
+    .proof__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (min-width: 640px) and (max-width: 960px) {
+    .apart {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,169 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/sections/PageHero.astro';
+import FoodGallery from '@/components/sections/FoodGallery.astro';
+import StatsBento from '@/components/sections/StatsBento.astro';
+import Testimonials from '@/components/sections/Testimonials.astro';
+import CtaBanner from '@/components/sections/CtaBanner.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import Button from '@/components/ui/Button.astro';
+import UnsplashImage from '@/components/ui/UnsplashImage.astro';
+import { images } from '@/data/images';
+import { values } from '@/data/highlights';
+import { breadcrumbSchema, graph, organizationSchema, webPageSchema } from '@/lib/schema';
+
+const description =
+  'Meet More Bums on Seats — a hospitality marketing team passionate about helping restaurants and bars fill every table with eager diners.';
+
+const jsonLd = graph(
+  webPageSchema('AboutPage', { name: 'About More Bums on Seats', path: '/about/', description }),
+  organizationSchema(),
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'About', path: '/about/' },
+  ]),
+);
+
+const valueTones = ['var(--c-lime)', 'var(--c-sky-100)', 'var(--c-pink)'];
+---
+
+<BaseLayout
+  title="About Us"
+  description={description}
+  ogImage={images.crowdedTable.id}
+  jsonLd={jsonLd}
+>
+  <PageHero
+    eyebrow="About"
+    title="We’re obsessed with <span>full tables</span>"
+    lead="At More Bums on Seats, we’re passionate about helping restaurants fill every table with eager diners through tailored marketing strategies."
+    image={images.crowdedTable}
+    tone="tomato"
+  />
+
+  <section class="section" aria-labelledby="story-title">
+    <div class="container story">
+      <div class="story__media" data-reveal>
+        <UnsplashImage image={images.chef} width={560} height={680} sizes="(max-width: 860px) 100vw, 40vw" />
+        <UnsplashImage image={images.bar} width={360} height={360} sizes="(max-width: 860px) 50vw, 20vw" class="story__inset" />
+      </div>
+      <div class="story__copy">
+        <SectionHeading
+          eyebrow="Our story"
+          title="Built by people who <em>love a busy room</em>"
+        />
+        <div class="stack lead">
+          <p>
+            Great food deserves a full dining room. Yet too many brilliant restaurants, bars and cafés sit
+            half-empty midweek — not because the food isn’t good, but because the right guests never hear
+            about it.
+          </p>
+          <p>
+            We started More Bums on Seats to change that. We combine local advertising, mouth-watering social
+            content and well-promoted events into one plan, then measure everything in the only metric that
+            matters to you: bookings.
+          </p>
+        </div>
+        <Button href="/contact/" variant="ink" withArrow>Work with us</Button>
+      </div>
+    </div>
+  </section>
+
+  <FoodGallery />
+
+  <section class="section" aria-labelledby="values-title">
+    <div class="container">
+      <SectionHeading eyebrow="What we believe" title="Three ingredients, <em>every time</em>" align="center" />
+      <ul role="list" class="values">
+        {
+          values.map((value, i) => (
+            <li class="value" style={`--tone:${valueTones[i]}`} data-reveal>
+              <span class="value__num">{i + 1}</span>
+              <h3 class="value__title">{value.title}</h3>
+              <p>{value.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <StatsBento />
+  <Testimonials />
+  <CtaBanner />
+</BaseLayout>
+
+<style>
+  .story {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  .story__media {
+    position: relative;
+    padding-bottom: 3rem;
+  }
+
+  .story__media :global(img) {
+    width: 85%;
+    border-radius: var(--radius-xl);
+    aspect-ratio: 56 / 68;
+    object-fit: cover;
+  }
+
+  .story__media :global(.story__inset) {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 45%;
+    aspect-ratio: 1;
+    border: 6px solid var(--c-paper);
+    box-shadow: var(--shadow-md);
+    rotate: 4deg;
+  }
+
+  .story__copy {
+    display: grid;
+    gap: var(--space-lg);
+    justify-items: start;
+  }
+
+  .story__copy :global(.section-heading) {
+    margin-bottom: 0;
+  }
+
+  .values {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+
+  .value {
+    display: grid;
+    align-content: start;
+    gap: var(--space-sm);
+    padding: var(--space-xl) var(--space-lg);
+    border-radius: var(--radius-lg);
+    background: var(--tone);
+  }
+
+  .value__num {
+    font-family: var(--font-display);
+    font-size: var(--fs-4xl);
+    font-weight: 800;
+    line-height: 0.9;
+  }
+
+  .value__title {
+    font-size: var(--fs-xl);
+  }
+
+  @media (max-width: 860px) {
+    .story,
+    .values {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

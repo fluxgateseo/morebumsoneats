@@ -1,0 +1,246 @@
+---
+/**
+ * Big, people-first result cards for the hero: real client owners and venues
+ * with their headline result. Photos come from the client case studies.
+ */
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import omar from '@/assets/owners/omar-el-deek.jpg';
+import micheleFabio from '@/assets/owners/michele-and-fabio.jpg';
+import andrea from '@/assets/owners/andrea-fioriti.jpg';
+import cafeNateBarista from '@/assets/owners/cafe-nate-barista.jpg';
+import vaporettoRoom from '@/assets/owners/vaporetto-dining-room.jpg';
+import cucinettaPasta from '@/assets/owners/cucinetta-fettuccine.jpg';
+
+interface Story {
+  slug: string;
+  photo: ImageMetadata;
+  alt: string;
+  value: string;
+  label: string;
+  /** Who/what is pictured — only name a person when they are in the photo. */
+  name: string;
+  detail: string;
+  focus?: string;
+}
+
+const stories: Story[] = [
+  {
+    slug: 'cosi-bar-ristorante',
+    photo: omar,
+    alt: 'Omar El Deek, owner of Cosi Bar Ristorante',
+    value: '+152%',
+    label: 'Calls & bookings',
+    name: 'Omar El Deek',
+    detail: 'Owner of Cosi Bar Ristorante',
+  },
+  {
+    slug: '48h-pizza-e-gnocchi-bar',
+    photo: micheleFabio,
+    alt: 'Michele and Fabio, owners of 48h Pizza e Gnocchi Bar',
+    value: '100+',
+    label: 'Extra bookings a week',
+    name: 'Michele & Fabio',
+    detail: 'Owners of 48h Pizza e Gnocchi Bar',
+    focus: '50% 30%',
+  },
+  {
+    slug: 'vaporetto',
+    photo: vaporettoRoom,
+    alt: 'Dining room at Vaporetto Bar & Eatery in Hawthorn',
+    value: '+173%',
+    label: 'Calls & bookings',
+    name: 'Vaporetto Bar & Eatery',
+    detail: 'Hawthorn, Melbourne',
+  },
+  {
+    slug: 'piccolino-pizza',
+    photo: andrea,
+    alt: 'Andrea Fioriti, head chef and partner at Piccolino',
+    value: '+202%',
+    label: 'Calls & bookings',
+    name: 'Andrea Fioriti',
+    detail: 'Head Chef & Partner, Piccolino',
+    focus: '50% 20%',
+  },
+  {
+    slug: 'cucinetta',
+    photo: cucinettaPasta,
+    alt: 'Fettuccine funghi served at Cucinetta',
+    value: '+277%',
+    label: 'Conversion rate',
+    name: 'Cucinetta',
+    detail: 'South Yarra, Melbourne',
+  },
+  {
+    slug: 'cafe-nate',
+    photo: cafeNateBarista,
+    alt: 'Barista pouring latte art at Cafe Nate',
+    value: '+19.7%',
+    label: 'Revenue in 4 months',
+    name: 'Cafe Nate',
+    detail: 'Roseville, New South Wales',
+  },
+];
+
+// Duplicated once so the marquee loops seamlessly.
+const loop = [...stories, ...stories];
+---
+
+<div class="owners">
+  <h2 class="owners__title">Fill tables like these owners</h2>
+  <div class="owners__viewport">
+    <ul role="list" class="owners__track">
+      {
+        loop.map((story, i) => {
+          const hidden = i >= stories.length;
+          return (
+            <li class="owner" aria-hidden={hidden ? 'true' : undefined}>
+              <a href={`/case-studies/${story.slug}/`} tabindex={hidden ? -1 : undefined} class="owner__link">
+                <Image
+                  src={story.photo}
+                  alt={hidden ? '' : story.alt}
+                  widths={[320, 480, 640]}
+                  sizes="(max-width: 640px) 72vw, 340px"
+                  format="webp"
+                  quality={78}
+                  loading={i < 4 ? 'eager' : 'lazy'}
+                  class="owner__photo"
+                  style={story.focus ? `object-position:${story.focus}` : undefined}
+                />
+                <div class="owner__overlay">
+                  <p class="owner__value">{story.value}</p>
+                  <p class="owner__label">{story.label}</p>
+                  <p class="owner__name">{story.name}</p>
+                  <p class="owner__detail">{story.detail}</p>
+                </div>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</div>
+
+<style>
+  .owners {
+    margin-top: clamp(3rem, 7vw, 5rem);
+  }
+
+  .owners__title {
+    width: min(100% - 2 * var(--gutter), var(--container));
+    margin: 0 auto var(--space-lg);
+    font-size: var(--fs-2xl);
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .owners__viewport {
+    overflow: hidden;
+  }
+
+  .owners__track {
+    --gap: var(--space-sm);
+    display: flex;
+    gap: var(--gap);
+    width: max-content;
+    padding-block: var(--space-sm);
+    animation: owners-scroll 60s linear infinite;
+  }
+
+  .owners:hover .owners__track,
+  .owners:focus-within .owners__track {
+    animation-play-state: paused;
+  }
+
+  @keyframes owners-scroll {
+    to {
+      transform: translateX(calc(-50% - var(--gap) / 2));
+    }
+  }
+
+  .owner {
+    flex-shrink: 0;
+    width: clamp(240px, 26vw, 340px);
+  }
+
+  .owner__link {
+    position: relative;
+    display: block;
+    aspect-ratio: 3 / 4;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--c-ink);
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.35s var(--ease-out);
+  }
+
+  .owner__link:hover {
+    transform: translateY(-6px);
+  }
+
+  .owner :global(.owner__photo) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  .owner__link:hover :global(.owner__photo) {
+    transform: scale(1.04);
+  }
+
+  .owner__overlay {
+    position: absolute;
+    inset: auto 0 0;
+    display: grid;
+    padding: 4rem var(--space-lg) var(--space-lg);
+    background: linear-gradient(transparent, rgb(12 13 18 / 0.88) 45%);
+    color: var(--c-paper);
+    text-align: left;
+  }
+
+  .owner__value {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1.6rem + 1.4vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--c-lime);
+  }
+
+  .owner__label {
+    margin-bottom: var(--space-sm);
+    font-family: var(--font-display);
+    font-size: var(--fs-xl);
+    font-weight: 600;
+    line-height: 1.15;
+    color: rgb(255 255 255 / 0.85);
+  }
+
+  .owner__name {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+  }
+
+  .owner__detail {
+    font-size: var(--fs-sm);
+    color: rgb(255 255 255 / 0.75);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .owners__viewport {
+      overflow-x: auto;
+    }
+
+    .owners__track {
+      animation: none;
+      padding-inline: var(--gutter);
+    }
+
+    .owner[aria-hidden='true'] {
+      display: none;
+    }
+  }
+</style>

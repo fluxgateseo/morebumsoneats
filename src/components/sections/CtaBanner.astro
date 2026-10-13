@@ -1,0 +1,119 @@
+---
+import { Image } from 'astro:assets';
+import celebratingOnStool from '@/assets/illustrations/celebrating-on-stool.png';
+import Button from '@/components/ui/Button.astro';
+import { site } from '@/config/site';
+
+export interface Props {
+  title?: string;
+  text?: string;
+}
+
+const {
+  title = 'Ready to see every seat filled?',
+  text = 'Let’s boost your bookings and bring more guests through your doors. Start with a free, no-strings marketing audit.',
+} = Astro.props;
+---
+
+<section class="cta section" aria-labelledby="cta-title">
+  <div class="container">
+    <div class="cta__box" data-reveal>
+      <div class="cta__copy">
+        <p class="eyebrow">Get started</p>
+        <h2 id="cta-title" class="cta__title">{title}</h2>
+        <p>{text}</p>
+        <div class="cta__actions">
+          <Button href="/contact/" variant="ink" withArrow>Book your free audit</Button>
+          <Button href={`mailto:${site.contact.email}`} variant="outline">Email us</Button>
+        </div>
+        <p class="cta__email">
+          Or write to <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+        </p>
+      </div>
+      <div class="cta__art">
+        <Image
+          src={celebratingOnStool}
+          alt=""
+          widths={[280, 400, 560, 720]}
+          sizes="(max-width: 860px) 260px, 340px"
+          format="webp"
+          quality={80}
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta__box {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: var(--space-xl);
+    align-items: center;
+    padding: clamp(2rem, 5vw, 4rem);
+    border-radius: var(--radius-xl);
+    background:
+      radial-gradient(circle at 90% 10%, var(--c-sun), transparent 40%),
+      var(--c-tomato);
+    overflow: hidden;
+  }
+
+  .cta__copy {
+    display: grid;
+    gap: var(--space-md);
+    justify-items: start;
+  }
+
+  .cta__title {
+    font-size: var(--fs-3xl);
+    max-width: 14ch;
+  }
+
+  .cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+  }
+
+  .cta__email {
+    font-size: var(--fs-sm);
+  }
+
+  .cta__email a {
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  .cta__art {
+    display: grid;
+    place-items: center;
+  }
+
+  .cta__art :global(img) {
+    width: min(340px, 100%);
+    height: auto;
+    filter: drop-shadow(0 18px 22px rgb(12 13 18 / 0.25));
+    animation: sway 5s ease-in-out infinite;
+  }
+
+  @keyframes sway {
+    50% {
+      rotate: -3deg;
+      translate: 0 -6px;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .cta__art :global(img) {
+      width: 260px;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .cta__box {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

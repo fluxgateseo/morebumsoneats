@@ -1,0 +1,28 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/sections/Hero.astro';
+import PressStrip from '@/components/sections/PressStrip.astro';
+import AboutIntro from '@/components/sections/AboutIntro.astro';
+import StatsBento from '@/components/sections/StatsBento.astro';
+import ServicesGrid from '@/components/sections/ServicesGrid.astro';
+import Process from '@/components/sections/Process.astro';
+import Testimonials from '@/components/sections/Testimonials.astro';
+import CtaBanner from '@/components/sections/CtaBanner.astro';
+import { graph, organizationSchema, websiteSchema } from '@/lib/schema';
+
+const jsonLd = graph(organizationSchema(), websiteSchema());
+---
+
+<BaseLayout
+  description="Restaurant marketing agency helping restaurants, bars and dining venues fill more tables with local campaigns, social media and events that boost bookings and revenue."
+  jsonLd={jsonLd}
+>
+  <Hero />
+  <PressStrip />
+  <AboutIntro />
+  <StatsBento />
+  <ServicesGrid />
+  <Process />
+  <Testimonials />
+  <CtaBanner />
+</BaseLayout>

@@ -1,0 +1,372 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { Image, getImage } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CaseStudyCard from '@/components/sections/CaseStudyCard.astro';
+import CtaBanner from '@/components/sections/CtaBanner.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { site } from '@/config/site';
+import { caseStudies, type CaseStudy } from '@/data/case-studies';
+import { breadcrumbSchema, graph } from '@/lib/schema';
+
+export const getStaticPaths = (() =>
+  caseStudies.map((study) => ({ params: { slug: study.slug }, props: { study } }))) satisfies GetStaticPaths;
+
+interface Props {
+  study: CaseStudy;
+}
+
+const { study } = Astro.props;
+const path = `/case-studies/${study.slug}/`;
+const [revenue, calls] = study.metrics;
+const description = `${study.name} (${study.location}): +${calls.value} phone calls & bookings and +${revenue.value} revenue with local SEO, a rebrand and a new website.`;
+const related = caseStudies.filter((s) => s.slug !== study.slug).slice(0, 3);
+const metricTones = ['sky', 'lime', 'tomato'];
+
+const ogImage = await getImage({ src: study.image, width: 1200, format: 'jpg' });
+
+const jsonLd = graph(
+  {
+    '@type': 'Article',
+    headline: `${study.name} case study`,
+    description,
+    image: new URL(ogImage.src, site.url).toString(),
+    author: { '@id': new URL('/#organization', site.url).toString() },
+    publisher: { '@id': new URL('/#organization', site.url).toString() },
+    mainEntityOfPage: new URL(path, site.url).toString(),
+    about: { '@type': 'Restaurant', name: study.name, address: study.location },
+  },
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Case Studies', path: '/case-studies/' },
+    { name: study.name, path },
+  ]),
+);
+---
+
+<BaseLayout title={`${study.name} Case Study`} description={description} jsonLd={jsonLd}>
+  <section class="cs-hero" aria-labelledby="page-title">
+    <div class="container cs-hero__grid">
+      <div class="cs-hero__copy">
+        <nav aria-label="Breadcrumb" class="breadcrumb">
+          <ol role="list">
+            <li><a href="/">Home</a></li>
+            <li><a href="/case-studies/">Case studies</a></li>
+            <li aria-current="page">{study.name}</li>
+          </ol>
+        </nav>
+        <p class="cs-hero__location">{study.location}</p>
+        <h1 id="page-title" class="cs-hero__title">{study.name}</h1>
+        <p class="cs-hero__tagline">{study.tagline}</p>
+      </div>
+      <div class="cs-hero__media">
+        <Image
+          src={study.image}
+          alt={study.imageAlt}
+          widths={[480, 720, 960]}
+          sizes="(max-width: 860px) 100vw, 45vw"
+          format="webp"
+          quality={78}
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="results-title">
+    <div class="container">
+      <h2 id="results-title" class="visually-hidden">Key results</h2>
+      <ul role="list" class="metrics">
+        {
+          study.metrics.map((metric, i) => (
+            <li class:list={['metric', `metric--${metricTones[i]}`]} data-reveal style={`--reveal-delay:${i * 0.08}s`}>
+              <p class="metric__value">+{metric.value}</p>
+              <p class="metric__label">{metric.label}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="metrics__period">Comparison period: {study.period}</p>
+
+      <div class="story">
+        <article class="story__block" data-reveal>
+          <p class="eyebrow">The challenge</p>
+          <p class="story__text">{study.challenge}</p>
+        </article>
+        <article class="story__block" data-reveal>
+          <p class="eyebrow">Our strategy</p>
+          <ul role="list" class="story__list">
+            {
+              study.strategy.map((step) => (
+                <li>
+                  <span class="tick" aria-hidden="true"><Icon name="check" size={14} /></span>
+                  {step}
+                </li>
+              ))
+            }
+          </ul>
+          {
+            study.areas.length > 1 && (
+              <p class="story__areas">
+                <strong>Areas targeted:</strong> {study.areas.join(', ')}
+              </p>
+            )
+          }
+        </article>
+        <article class="story__block" data-reveal>
+          <p class="eyebrow">The results</p>
+          <p class="story__text">{study.results}</p>
+        </article>
+      </div>
+
+      <figure class="quote" data-reveal>
+        <blockquote><p>“{study.quote}”</p></blockquote>
+        <figcaption>
+          <strong>{study.author}</strong>
+          <span>{study.authorRole} · {study.location}</span>
+        </figcaption>
+      </figure>
+
+      <div class="source">
+        <Button href={study.sourceUrl} variant="outline" withArrow>Read the full case study</Button>
+        <p class="source__note">
+          More Bums on Seats is a sister brand of SEO for Restaurants, where you’ll find the complete write-up.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section related" aria-labelledby="related-title">
+    <div class="container">
+      <SectionHeading eyebrow="More results" title="Other venues we’ve <em>helped</em>" />
+      <ul role="list" class="related__grid">
+        {related.map((s, i) => <li><CaseStudyCard study={s} tone={(['sky', 'tomato', 'pink'] as const)[i]} /></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBanner title="Want results like these?" />
+</BaseLayout>
+
+<style>
+  .cs-hero {
+    margin: 0.5rem;
+    padding-top: clamp(8.5rem, 14vw, 11.5rem);
+    padding-bottom: var(--space-2xl);
+    border-radius: var(--radius-xl);
+    background:
+      radial-gradient(50% 40% at 10% 110%, rgb(255 255 255 / 0.5), transparent 70%),
+      linear-gradient(160deg, var(--c-sky-700), var(--c-sky) 50%, var(--c-sky-300));
+    color: var(--c-paper);
+  }
+
+  .cs-hero__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  .cs-hero__copy {
+    display: grid;
+    gap: var(--space-md);
+    justify-items: start;
+  }
+
+  .breadcrumb ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .breadcrumb li + li::before {
+    content: '/';
+    margin-right: 0.5rem;
+    opacity: 0.6;
+  }
+
+  .cs-hero__location {
+    padding: 0.35rem 0.9rem;
+    border-radius: var(--radius-pill);
+    background: var(--c-lime);
+    color: var(--c-ink);
+    font-weight: 600;
+    font-size: var(--fs-sm);
+  }
+
+  .cs-hero__title {
+    font-size: var(--fs-4xl);
+    font-weight: 600;
+  }
+
+  .cs-hero__tagline {
+    font-size: var(--fs-lg);
+    opacity: 0.9;
+  }
+
+  .cs-hero__media :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    border: 6px solid rgb(255 255 255 / 0.85);
+    box-shadow: var(--shadow-lg);
+    rotate: 2deg;
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+
+  .metric {
+    display: grid;
+    gap: var(--space-xs);
+    padding: var(--space-xl) var(--space-lg);
+    border-radius: var(--radius-lg);
+  }
+
+  .metric--sky {
+    background: var(--c-sky);
+    color: var(--c-paper);
+  }
+  .metric--lime {
+    background: var(--c-lime);
+  }
+  .metric--tomato {
+    background: var(--c-tomato);
+    color: var(--c-paper);
+  }
+
+  .metric__value {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 2rem + 2.5vw, 4rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .metrics__period {
+    margin-top: var(--space-sm);
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+  }
+
+  .story {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    margin-top: var(--space-2xl);
+  }
+
+  .story__block {
+    display: grid;
+    align-content: start;
+    gap: var(--space-md);
+    padding: var(--space-xl) var(--space-lg);
+    border-radius: var(--radius-lg);
+    background: var(--c-cloud);
+  }
+
+  .story__text {
+    color: var(--c-ink-soft);
+  }
+
+  .story__list {
+    display: grid;
+    gap: var(--space-sm);
+    color: var(--c-ink-soft);
+  }
+
+  .story__list li {
+    display: flex;
+    gap: var(--space-sm);
+  }
+
+  .tick {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 1.4rem;
+    height: 1.4rem;
+    margin-top: 0.15rem;
+    border-radius: 50%;
+    background: var(--c-ink);
+    color: var(--c-lime);
+  }
+
+  .story__areas {
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+  }
+
+  .quote {
+    display: grid;
+    gap: var(--space-lg);
+    margin-top: var(--space-2xl);
+    padding: clamp(1.75rem, 4vw, 3.5rem);
+    border-radius: var(--radius-xl);
+    background: var(--c-ink);
+    color: var(--c-paper);
+  }
+
+  .quote blockquote {
+    font-family: var(--font-display);
+    font-size: var(--fs-2xl);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .quote figcaption {
+    display: grid;
+    font-size: var(--fs-sm);
+  }
+
+  .quote figcaption strong {
+    color: var(--c-lime);
+    font-size: var(--fs-base);
+  }
+
+  .source {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+  }
+
+  .source__note {
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+  }
+
+  .related {
+    background: var(--c-cloud);
+    margin: 0.5rem;
+    border-radius: var(--radius-xl);
+  }
+
+  .related__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+
+  @media (max-width: 960px) {
+    .cs-hero__grid,
+    .metrics,
+    .story,
+    .related__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
