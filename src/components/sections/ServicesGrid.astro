@@ -3,7 +3,6 @@ import { Image } from 'astro:assets';
 import friendsAtTable from '@/assets/illustrations/friends-at-table.png';
 import Icon from '@/components/ui/Icon.astro';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
-import UnsplashImage from '@/components/ui/UnsplashImage.astro';
 import { services } from '@/data/services';
 ---
 
@@ -32,11 +31,13 @@ import { services } from '@/data/services';
           <li class:list={['service-card', `accent-${service.accent}`]} data-reveal style={`--reveal-delay:${i * 0.08}s`}>
             <a href={`/services/#${service.slug}`} class="service-card__link">
               <div class="service-card__media">
-                <UnsplashImage
-                  image={service.image}
-                  width={600}
-                  height={420}
+                <Image
+                  src={service.image}
+                  alt={service.imageAlt}
+                  widths={[320, 480, 640, 800]}
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  format="webp"
+                  quality={80}
                 />
               </div>
               <div class="service-card__body">

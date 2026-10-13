@@ -1,4 +1,8 @@
-import { images, type SiteImage } from './images';
+import type { ImageMetadata } from 'astro';
+import tableFilling from '@/assets/services/table-filling-campaigns.png';
+import socialMedia from '@/assets/services/social-media.png';
+import eventBoost from '@/assets/services/event-boost.png';
+import marketingAudit from '@/assets/services/marketing-audit.png';
 
 export type Accent = 'sky' | 'lime' | 'tomato' | 'pink' | 'sun' | 'ink';
 
@@ -8,7 +12,8 @@ export interface Service {
   summary: string;
   description: string;
   deliverables: string[];
-  image: SiteImage;
+  image: ImageMetadata;
+  imageAlt: string;
   accent: Accent;
 }
 
@@ -25,7 +30,8 @@ export const services: Service[] = [
       'Google Ads',
       'Booking & function-enquiry funnel tracking',
     ],
-    image: images.diningRoom,
+    image: tableFilling,
+    imageAlt: 'Illustration of a host showing a fully booked calendar while guests enjoy dinner',
     accent: 'sky',
   },
   {
@@ -41,7 +47,8 @@ export const services: Service[] = [
       'Short-form video & content calendars',
       'Community management',
     ],
-    image: images.pokeBowl,
+    image: socialMedia,
+    imageAlt: 'Illustration of a creator filming a burger for social media, with likes and comments popping up',
     accent: 'tomato',
   },
   {
@@ -51,7 +58,8 @@ export const services: Service[] = [
     description:
       'From bottomless brunch to menu launches, we build the buzz, sell the tickets and make sure the room is full when the doors open.',
     deliverables: ['Event landing pages', 'Ticketing & RSVP promos', 'Influencer invites'],
-    image: images.cocktails,
+    image: eventBoost,
+    imageAlt: 'Illustration of a host with a megaphone promoting a live music night',
     accent: 'lime',
   },
   {
@@ -61,7 +69,8 @@ export const services: Service[] = [
     description:
       'A clear-eyed look at your website, Google profile, reviews, socials and booking flow — delivered as a prioritised action plan you can use straight away.',
     deliverables: ['Google Business Profile review', 'Website & booking UX check', 'Prioritised action plan'],
-    image: images.chefPrep,
+    image: marketingAudit,
+    imageAlt: 'Illustration of two people reviewing restaurant growth charts with a magnifying glass',
     accent: 'pink',
   },
 ];
