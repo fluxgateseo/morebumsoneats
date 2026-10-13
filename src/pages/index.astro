@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Hero from '@/components/sections/Hero.astro';
-import VenueMarquee from '@/components/sections/VenueMarquee.astro';
+import PressStrip from '@/components/sections/PressStrip.astro';
 import AboutIntro from '@/components/sections/AboutIntro.astro';
 import StatsBento from '@/components/sections/StatsBento.astro';
 import ServicesGrid from '@/components/sections/ServicesGrid.astro';
@@ -18,7 +18,7 @@ const jsonLd = graph(organizationSchema(), websiteSchema());
   jsonLd={jsonLd}
 >
   <Hero />
-  <VenueMarquee />
+  <PressStrip />
   <AboutIntro />
   <StatsBento />
   <ServicesGrid />

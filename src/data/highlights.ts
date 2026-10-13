@@ -1,4 +1,4 @@
-/** Process steps, venue types and headline figures used across the site. */
+/** Process steps and values used across the site. */
 
 export interface Step {
   title: string;
@@ -10,19 +10,6 @@ export const process: Step[] = [
   { title: 'Plan', text: 'A tailored strategy built around your quietest covers.' },
   { title: 'Launch', text: 'Campaigns, content and events go live across every channel.' },
   { title: 'Optimise', text: 'Weekly tweaks and clear reporting on bookings and revenue.' },
-];
-
-export const venueTypes: string[] = [
-  'Restaurants',
-  'Cocktail bars',
-  'Cafés',
-  'Pizzerias',
-  'Rooftop terraces',
-  'Brunch spots',
-  'Wine bars',
-  'Gastropubs',
-  'Burger joints',
-  'Bakeries',
 ];
 
 export const values: Step[] = [
