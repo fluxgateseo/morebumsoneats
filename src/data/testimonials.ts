@@ -2,6 +2,7 @@ import type { ImageMetadata } from 'astro';
 import omar from '@/assets/owners/omar-el-deek.jpg';
 import micheleFabio from '@/assets/owners/michele-and-fabio.jpg';
 import andrea from '@/assets/owners/andrea-fioriti.jpg';
+import peach from '@/assets/owners/peach.jpg';
 
 /**
  * Real testimonials only, attributed as published:
@@ -72,6 +73,7 @@ export const testimonials: Testimonial[] = [
     name: 'Peach',
     detail: 'Owner, Cafe Nate',
     source: 'client',
+    avatar: peach,
     caseStudy: 'cafe-nate',
   },
   {
