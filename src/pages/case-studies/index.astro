@@ -1,0 +1,79 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/sections/PageHero.astro';
+import CaseStudyCard from '@/components/sections/CaseStudyCard.astro';
+import CtaBanner from '@/components/sections/CtaBanner.astro';
+import Button from '@/components/ui/Button.astro';
+import { caseStudies } from '@/data/case-studies';
+import { images } from '@/data/images';
+import { breadcrumbSchema, graph, webPageSchema } from '@/lib/schema';
+
+const description =
+  'Restaurant marketing case studies: how Melbourne and Sydney venues grew bookings, phone calls and revenue with local SEO, rebrands and new websites.';
+
+const tones = ['sky', 'tomato', 'lime', 'pink'] as const;
+
+const jsonLd = graph(
+  webPageSchema('WebPage', { name: 'Restaurant marketing case studies', path: '/case-studies/', description }),
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Case Studies', path: '/case-studies/' },
+  ]),
+  {
+    '@type': 'ItemList',
+    itemListElement: caseStudies.map((study, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: study.name,
+      url: new URL(`/case-studies/${study.slug}/`, 'https://morebumsonseats.com').toString(),
+    })),
+  },
+);
+---
+
+<BaseLayout title="Case Studies" description={description} ogImage={images.crowdedTable.id} jsonLd={jsonLd}>
+  <PageHero
+    eyebrow="Case Studies"
+    title="Real venues. <span>Real results.</span>"
+    lead="See how we’ve helped restaurants like yours get discovered, fill tables and grow their online presence — because your success is our best work."
+    tone="tomato"
+  >
+    <Button href="/contact/" withArrow>Get a free audit</Button>
+  </PageHero>
+
+  <section class="section" aria-label="All case studies">
+    <div class="container">
+      <ul role="list" class="cs-grid">
+        {
+          caseStudies.map((study, i) => (
+            <li data-reveal style={`--reveal-delay:${(i % 3) * 0.08}s`}>
+              <CaseStudyCard study={study} tone={tones[i % tones.length]} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaBanner title="Want results like these?" text="Work with a team that understands restaurant marketing and drives real results. Let’s talk." />
+</BaseLayout>
+
+<style>
+  .cs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+
+  @media (max-width: 1024px) {
+    .cs-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .cs-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
