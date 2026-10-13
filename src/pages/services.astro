@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import servicesHero from '@/assets/services/services-hero.png';
+import jumpingFriends from '@/assets/illustrations/jumping-friends.png';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHero from '@/components/sections/PageHero.astro';
 import Process from '@/components/sections/Process.astro';
@@ -34,9 +34,8 @@ const jsonLd = graph(
     eyebrow="Services"
     title="Marketing that <span>fills seats</span>, night after night"
     lead="Targeted local marketing that drives reservations, builds buzz and keeps your dining room busy — from Monday lulls to Saturday rushes."
-    illustration={servicesHero}
-    illustrationAlt="Illustration of a busy restaurant: a host showing a fully booked calendar while guests toast and staff serve dishes"
-    framed
+    illustration={jumpingFriends}
+    illustrationAlt="Illustration of two friends jumping for joy"
   >
     <Button href="/contact/" withArrow>Let’s talk</Button>
   </PageHero>
