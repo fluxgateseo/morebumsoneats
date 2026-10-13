@@ -3,6 +3,7 @@ import omar from '@/assets/owners/omar-el-deek.jpg';
 import micheleFabio from '@/assets/owners/michele-and-fabio.jpg';
 import andrea from '@/assets/owners/andrea-fioriti.jpg';
 import peach from '@/assets/owners/peach.jpg';
+import galih from '@/assets/owners/galih.jpg';
 
 /**
  * Real testimonials only, attributed as published:
@@ -59,6 +60,7 @@ export const testimonials: Testimonial[] = [
     name: 'Galih',
     detail: 'Google review',
     source: 'google',
+    avatar: galih,
   },
   {
     quote:
