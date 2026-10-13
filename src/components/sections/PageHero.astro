@@ -12,10 +12,14 @@ export interface Props {
   image?: SiteImage;
   /** Brand illustration shown instead of a photo. */
   illustration?: ImageMetadata;
+  /** Alt text for the illustration (decorative when omitted). */
+  illustrationAlt?: string;
+  /** Show the illustration in the same framed, tilted card as photos. */
+  framed?: boolean;
   tone?: 'sky' | 'tomato' | 'ink' | 'pink';
 }
 
-const { eyebrow, title, lead, image, illustration, tone = 'sky' } = Astro.props;
+const { eyebrow, title, lead, image, illustration, illustrationAlt = '', framed = false, tone = 'sky' } = Astro.props;
 ---
 
 <section class:list={['page-hero', `page-hero--${tone}`]} aria-labelledby="page-title">
@@ -47,12 +51,12 @@ const { eyebrow, title, lead, image, illustration, tone = 'sky' } = Astro.props;
     }
     {
       illustration && (
-        <div class="page-hero__media page-hero__media--art">
+        <div class:list={['page-hero__media', framed ? 'page-hero__media--framed' : 'page-hero__media--art']}>
           <Image
             src={illustration}
-            alt=""
-            widths={[320, 480, 640]}
-            sizes="(max-width: 860px) 70vw, 420px"
+            alt={illustrationAlt}
+            widths={framed ? [480, 720, 960] : [320, 480, 640]}
+            sizes={framed ? '(max-width: 860px) 100vw, 45vw' : '(max-width: 860px) 70vw, 420px'}
             format="webp"
             quality={80}
             loading="eager"
@@ -155,6 +159,11 @@ const { eyebrow, title, lead, image, illustration, tone = 'sky' } = Astro.props;
     aspect-ratio: 72 / 56;
     object-fit: cover;
     rotate: 2deg;
+  }
+
+  .page-hero__media--framed :global(img) {
+    aspect-ratio: 1402 / 1122;
+    height: auto;
   }
 
   .page-hero__media--art {
