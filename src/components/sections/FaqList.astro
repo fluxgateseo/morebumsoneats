@@ -1,7 +1,13 @@
 ---
 import Icon from '@/components/ui/Icon.astro';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
-import { faqs } from '@/data/faqs';
+import { faqs as defaultFaqs, type Faq } from '@/data/faqs';
+
+export interface Props {
+  items?: Faq[];
+}
+
+const { items: faqs = defaultFaqs } = Astro.props;
 ---
 
 <section class="section" aria-labelledby="faq-title">

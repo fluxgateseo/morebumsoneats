@@ -14,4 +14,4 @@ export const mainNav: NavItem[] = [
 
 export const legalNav: NavItem[] = [{ label: 'Privacy Policy', href: '/privacy-policy/' }];
 
-export const primaryCta: NavItem = { label: 'Get a free audit', href: '/contact/' };
+export const primaryCta: NavItem = { label: 'Book a free session', href: '/booking/' };

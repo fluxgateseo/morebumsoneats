@@ -1,0 +1,209 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/sections/PageHero.astro';
+import FaqList from '@/components/sections/FaqList.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { site } from '@/config/site';
+import { bookingFaqs } from '@/data/faqs';
+import { images } from '@/data/images';
+import { breadcrumbSchema, faqSchema, graph, webPageSchema } from '@/lib/schema';
+
+const CALENDAR_URL = 'https://tidycal.com/team/seo-for-restaurants/30-minute-strategy-session-free';
+const ADDRESS = { street: '12 Yeneda St., Balwyn North', city: 'Melbourne, Victoria 3104', country: 'Australia' };
+const mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(`${ADDRESS.street} ${ADDRESS.city}`)}&t=m&z=15&output=embed`;
+
+const description =
+  'Book a free 30-minute strategy session with More Bums on Seats and find out how to fill more tables at your restaurant, café or bar.';
+
+const jsonLd = graph(
+  webPageSchema('WebPage', { name: 'Book a free strategy session', path: '/booking/', description }),
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Booking', path: '/booking/' },
+  ]),
+  faqSchema(bookingFaqs),
+);
+---
+
+<BaseLayout title="Book a Free Strategy Session" description={description} ogImage={images.coffee.id} jsonLd={jsonLd}>
+  <PageHero
+    eyebrow="Booking"
+    title="Let’s talk about <span>filling more tables</span>"
+    lead="Pick a time for a free 30-minute strategy session. Bring your questions — you’ll leave with clear next steps for your venue."
+    tone="tomato"
+  />
+
+  <section class="section" aria-labelledby="book-title">
+    <div class="container booking">
+      <aside class="booking__details" data-reveal>
+        <h2 id="book-title" class="booking__title">Book your free session</h2>
+        <p class="text-muted">30 minutes · online · no obligation</p>
+
+        <ul role="list" class="details">
+          <li class="detail detail--lime">
+            <span class="detail__icon" aria-hidden="true"><Icon name="calendar" /></span>
+            <div>
+              <h3>What we’ll cover</h3>
+              <p>Your goals, quiet nights, Google and social presence — and the quickest wins to grow bookings.</p>
+            </div>
+          </li>
+          <li class="detail">
+            <span class="detail__icon" aria-hidden="true"><Icon name="search" /></span>
+            <div>
+              <h3>Our location</h3>
+              <address>
+                {ADDRESS.country}<br />
+                {ADDRESS.street}<br />
+                {ADDRESS.city}
+              </address>
+            </div>
+          </li>
+          <li class="detail">
+            <span class="detail__icon" aria-hidden="true"><Icon name="mail" /></span>
+            <div>
+              <h3>Email us at</h3>
+              <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+            </div>
+          </li>
+        </ul>
+      </aside>
+
+      <div class="booking__calendar" data-reveal style="--reveal-delay: 0.1s">
+        <iframe
+          src={CALENDAR_URL}
+          title="Book a free 30-minute strategy session"
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        <p class="booking__fallback">
+          Calendar not loading? <a href={CALENDAR_URL} target="_blank" rel="noopener">Open the booking page</a> or
+          email <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="container map" data-reveal>
+      <iframe src={mapUrl} title="Map of our Melbourne office" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </section>
+
+  <FaqList items={bookingFaqs} />
+</BaseLayout>
+
+<style>
+  .booking {
+    display: grid;
+    grid-template-columns: 1fr 1.8fr;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  .booking__details {
+    display: grid;
+    gap: var(--space-md);
+    position: sticky;
+    top: 7rem;
+  }
+
+  .booking__title {
+    font-size: var(--fs-2xl);
+  }
+
+  .details {
+    display: grid;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+  }
+
+  .detail {
+    display: flex;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    background: var(--c-cloud);
+  }
+
+  .detail--lime {
+    background: var(--c-lime);
+  }
+
+  .detail h3 {
+    margin-bottom: 0.25rem;
+    font-size: var(--fs-lg);
+  }
+
+  .detail p,
+  .detail address {
+    font-style: normal;
+    color: var(--c-ink-soft);
+  }
+
+  .detail a {
+    font-weight: 600;
+    text-decoration: underline;
+    word-break: break-all;
+  }
+
+  .detail__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background: var(--c-ink);
+    color: var(--c-lime);
+  }
+
+  .booking__calendar {
+    padding: 0.5rem;
+    border-radius: var(--radius-xl);
+    background: var(--c-tomato);
+  }
+
+  .booking__calendar iframe {
+    display: block;
+    width: 100%;
+    height: 820px;
+    border: 0;
+    border-radius: calc(var(--radius-xl) - 0.5rem);
+    background: var(--c-paper);
+  }
+
+  .booking__fallback {
+    padding: var(--space-sm) var(--space-md) var(--space-xs);
+    font-size: var(--fs-sm);
+    color: var(--c-paper);
+  }
+
+  .booking__fallback a {
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  .map {
+    margin-top: var(--space-2xl);
+  }
+
+  .map iframe {
+    display: block;
+    background: var(--c-cloud);
+    width: 100%;
+    height: 360px;
+    border: 0;
+    border-radius: var(--radius-xl);
+  }
+
+  @media (max-width: 900px) {
+    .booking {
+      grid-template-columns: 1fr;
+    }
+
+    .booking__details {
+      position: static;
+    }
+
+    .booking__calendar iframe {
+      height: 1100px;
+    }
+  }
+</style>

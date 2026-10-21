@@ -30,3 +30,32 @@ export const faqs: Faq[] = [
       'Yes. Our social packages include planning and producing short-form content, or we can work with photography you already have.',
   },
 ];
+
+/** Questions venue owners ask before booking a strategy session. */
+export const bookingFaqs: Faq[] = [
+  {
+    question: 'How long does it take to see results from SEO?',
+    answer:
+      'Google Business Profile and local fixes can lift calls and bookings within weeks. Organic rankings usually build over three to six months, then keep compounding.',
+  },
+  {
+    question: 'What makes restaurant SEO different from regular SEO?',
+    answer:
+      'Diners search close to when they want to eat, so Maps visibility, reviews, menus and opening hours matter more than long articles. We optimise for “near me” moments that end in a booking.',
+  },
+  {
+    question: 'Do you work with restaurants outside my area?',
+    answer:
+      'Yes. We work remotely with venues across Australia and beyond, and target the suburbs your guests actually come from.',
+  },
+  {
+    question: 'Will this work for my type of venue?',
+    answer:
+      'We work with restaurants, cafés, bars, pizzerias and multi-site groups. On the call we’ll tell you honestly where the biggest wins are for your venue.',
+  },
+  {
+    question: 'How much does it cost?',
+    answer:
+      'It depends on your goals and how many locations you have. The strategy session is free, and you’ll get a clear quote afterwards with no lock-in contract.',
+  },
+];
