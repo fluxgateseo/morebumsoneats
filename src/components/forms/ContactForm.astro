@@ -1,0 +1,136 @@
+---
+import Button from '@/components/ui/Button.astro';
+import FormSubmitFields from './FormSubmitFields.astro';
+import { formAction, formAjaxAction } from '@/lib/forms';
+
+const venueTypes = ['Restaurant', 'Bar / pub', 'Café', 'Hotel / venue', 'Other'];
+---
+
+<form class="contact-form" method="post" action={formAction} data-ajax-action={formAjaxAction} data-lead-form>
+  <FormSubmitFields subject="New enquiry — More Bums on Seats" id="contact" />
+
+  <div class="field">
+    <label for="name">Name</label>
+    <input id="name" name="name" type="text" autocomplete="name" required maxlength="100" />
+  </div>
+
+  <div class="field">
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" autocomplete="email" required maxlength="200" />
+  </div>
+
+  <div class="field">
+    <label for="venue">Venue name <span class="optional">(optional)</span></label>
+    <input id="venue" name="venue" type="text" autocomplete="organization" maxlength="150" />
+  </div>
+
+  <div class="field">
+    <label for="venue-type">Venue type</label>
+    <select id="venue-type" name="venueType">
+      {venueTypes.map((type) => <option>{type}</option>)}
+    </select>
+  </div>
+
+  <div class="field field--full">
+    <label for="message">Message</label>
+    <textarea id="message" name="message" rows="5" required maxlength="3000"
+      placeholder="Tell us about your venue and your quietest nights…"></textarea>
+  </div>
+
+  <label class="consent field--full">
+    <input type="checkbox" name="consent" required />
+    <span>
+      I consent to the use of the personal data provided for the purpose of responding to my request, as
+      described in the <a href="/privacy-policy/">Privacy Policy</a>. I may withdraw my consent at any time.
+    </span>
+  </label>
+
+  <div class="field--full contact-form__footer">
+    <Button type="submit" variant="ink" withArrow>Send message</Button>
+    <p class="contact-form__status" role="status" aria-live="polite" data-form-status></p>
+  </div>
+</form>
+
+<style>
+  .contact-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+  }
+
+  .field {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .field--full {
+    grid-column: 1 / -1;
+  }
+
+  label {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+  }
+
+  .optional {
+    font-weight: 400;
+    color: var(--c-muted);
+  }
+
+  input:not([type='checkbox']),
+  select,
+  textarea {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 2px solid var(--c-line);
+    border-radius: var(--radius-sm);
+    background: var(--c-paper);
+    transition: border-color 0.2s;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--c-sky);
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  .consent {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: flex-start;
+    font-weight: 400;
+    color: var(--c-ink-soft);
+  }
+
+  .consent input {
+    margin-top: 0.3rem;
+    accent-color: var(--c-sky);
+  }
+
+  .consent a {
+    text-decoration: underline;
+  }
+
+  .contact-form__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .contact-form__status {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+  }
+
+  @media (max-width: 560px) {
+    .contact-form {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

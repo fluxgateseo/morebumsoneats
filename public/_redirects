@@ -1,0 +1,14 @@
+# Cloudflare static assets — redirects
+# https://developers.cloudflare.com/workers/static-assets/redirects/
+
+# Legacy WordPress URLs from the previous site
+/feed                /                301
+/feed/               /                301
+/comments/feed/      /                301
+/wp-admin/*          /                301
+/wp-login.php        /                301
+/xmlrpc.php          /                301
+/index.php           /                301
+/home                /                301
+/home/               /                301
+/privacy             /privacy-policy/ 301

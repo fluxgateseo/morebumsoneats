@@ -1,0 +1,90 @@
+---
+import { Image } from 'astro:assets';
+import { press } from '@/data/press';
+
+// Duplicated once so the CSS loop is seamless.
+const items = [...press, ...press];
+
+/**
+ * Give every logo a similar visual weight: very wide wordmarks get shorter,
+ * compact marks get taller (constant area, capped height).
+ */
+const TARGET_AREA = 7000;
+const logoHeight = (width: number, height: number) =>
+  Math.round(Math.min(56, Math.sqrt(TARGET_AREA / (width / height))));
+---
+
+<section class="press" aria-labelledby="press-title">
+  <p id="press-title" class="eyebrow press__title">Our team has been featured in</p>
+  <div class="press__viewport">
+    <ul role="list" class="press__track">
+      {
+        items.map((item, i) => (
+          <li class="press__item" aria-hidden={i >= press.length ? 'true' : undefined}>
+            <Image
+              src={item.logo}
+              alt={i >= press.length ? '' : item.name}
+              height={logoHeight(item.logo.width, item.logo.height)}
+              densities={[1, 2]}
+              format="webp"
+              quality={85}
+              class="press__logo"
+              style={`--h:${logoHeight(item.logo.width, item.logo.height)}px`}
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .press {
+    padding-block: var(--space-xl) var(--space-lg);
+    text-align: center;
+  }
+
+  .press__title {
+    margin-bottom: var(--space-lg);
+    color: var(--c-muted);
+  }
+
+  .press__viewport {
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  .press__track {
+    display: flex;
+    align-items: center;
+    gap: clamp(2rem, 4vw, 4rem);
+    width: max-content;
+    animation: press-scroll 55s linear infinite;
+  }
+
+  .press:hover .press__track {
+    animation-play-state: paused;
+  }
+
+  .press__item {
+    flex-shrink: 0;
+  }
+
+  .press :global(.press__logo) {
+    width: auto;
+    height: calc(var(--h) * var(--logo-scale, 1));
+    mix-blend-mode: multiply;
+  }
+
+  @media (max-width: 640px) {
+    .press {
+      --logo-scale: 0.75;
+    }
+  }
+
+  @keyframes press-scroll {
+    to {
+      transform: translateX(calc(-50% - clamp(2rem, 4vw, 4rem) / 2));
+    }
+  }
+</style>

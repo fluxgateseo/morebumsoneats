@@ -1,0 +1,12 @@
+# Cloudflare Workers static assets configuration
+# https://developers.cloudflare.com/workers/static-assets/
+#
+# The site is fully static: Astro builds it into dist/ and Cloudflare serves it
+# from the edge, applying public/_headers and public/_redirects automatically.
+name = "morebumsonseats"
+compatibility_date = "2026-10-01"
+
+[assets]
+directory = "./dist"
+html_handling = "auto-trailing-slash"
+not_found_handling = "404-page"

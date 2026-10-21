@@ -1,0 +1,61 @@
+---
+import UnsplashImage from '@/components/ui/UnsplashImage.astro';
+import { images } from '@/data/images';
+
+const gallery = [
+  images.brunch,
+  images.burgerBeer,
+  images.saladBowl,
+  images.oldFashioned,
+  images.dessert,
+  images.coffee,
+  images.brunchSpread,
+  images.steakPlate,
+];
+const tilts = [-3, 2, -1, 3, -2, 1, -3, 2];
+---
+
+<section class="gallery" aria-label="Food and drink we help sell">
+  <ul role="list" class="gallery__track">
+    {
+      gallery.map((image, i) => (
+        <li style={`--tilt:${tilts[i]}deg`}>
+          <UnsplashImage image={image} width={360} height={440} sizes="(max-width: 640px) 45vw, 240px" widths={[240, 360, 720]} />
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .gallery {
+    padding-block: var(--space-xl);
+    overflow: hidden;
+  }
+
+  .gallery__track {
+    display: flex;
+    gap: var(--space-md);
+    width: max-content;
+    padding-inline: var(--gutter);
+    animation: drift 60s linear infinite alternate;
+  }
+
+  .gallery__track li {
+    width: clamp(180px, 22vw, 240px);
+    rotate: var(--tilt);
+  }
+
+  .gallery__track :global(img) {
+    width: 100%;
+    aspect-ratio: 36 / 44;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+  }
+
+  @keyframes drift {
+    to {
+      transform: translateX(calc(-100% + 100vw));
+    }
+  }
+</style>

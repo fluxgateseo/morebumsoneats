@@ -1,0 +1,46 @@
+---
+import { Image } from 'astro:assets';
+import logo from '@/assets/brand/logo.png';
+import { site } from '@/config/site';
+
+export interface Props {
+  class?: string;
+  /** Rendered width in CSS pixels (height follows the artwork's ratio). */
+  width?: number;
+  /** Load eagerly when the logo is above the fold. */
+  priority?: boolean;
+}
+
+const { class: className, width = 200, priority = false } = Astro.props;
+---
+
+<a href="/" class:list={['logo', className]} aria-label={`${site.name} — home`}>
+  <Image
+    src={logo}
+    alt={site.name}
+    width={width}
+    densities={[1, 2]}
+    format="webp"
+    quality={85}
+    loading={priority ? 'eager' : 'lazy'}
+    fetchpriority={priority ? 'high' : 'auto'}
+    class="logo__img"
+  />
+</a>
+
+<style>
+  .logo {
+    display: inline-block;
+    line-height: 0;
+  }
+
+  .logo__img {
+    width: var(--logo-width, auto);
+    height: auto;
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  .logo:hover .logo__img {
+    transform: rotate(-3deg) scale(1.03);
+  }
+</style>

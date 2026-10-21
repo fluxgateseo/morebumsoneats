@@ -1,0 +1,151 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '@/components/ui/Icon.astro';
+import type { CaseStudy } from '@/data/case-studies';
+
+export interface Props {
+  study: CaseStudy;
+  tone?: 'sky' | 'lime' | 'tomato' | 'pink';
+}
+
+const { study, tone = 'sky' } = Astro.props;
+const [headline] = study.metrics;
+const bookings = study.metrics[1];
+---
+
+<article class:list={['cs-card', `cs-card--${tone}`]}>
+  <a href={`/case-studies/${study.slug}/`} class="cs-card__link">
+    <div class="cs-card__media">
+      <Image
+        src={study.image}
+        alt={study.imageAlt}
+        widths={[360, 540, 720]}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        format="webp"
+        quality={75}
+      />
+      <span class="cs-card__badge">+{bookings.value} bookings</span>
+    </div>
+    <div class="cs-card__body">
+      <p class="cs-card__location">{study.location}</p>
+      <h3 class="cs-card__title">{study.name}</h3>
+      <p class="cs-card__metric"><strong>+{headline.value}</strong> {headline.label.toLowerCase()}</p>
+      <span class="cs-card__arrow" aria-hidden="true"><Icon name="arrow-up-right" /></span>
+    </div>
+  </a>
+</article>
+
+<style>
+  .cs-card {
+    --tone: var(--c-sky);
+    --on-tone: var(--c-paper);
+    height: 100%;
+    border-radius: var(--radius-lg);
+    background: var(--tone);
+    color: var(--on-tone);
+    overflow: hidden;
+    transition: transform 0.35s var(--ease-out);
+  }
+
+  .cs-card:hover {
+    transform: translateY(-6px);
+  }
+
+  .cs-card--lime {
+    --tone: var(--c-lime);
+    --on-tone: var(--c-ink);
+  }
+  .cs-card--tomato {
+    --tone: var(--c-tomato);
+  }
+  .cs-card--pink {
+    --tone: var(--c-pink);
+    --on-tone: var(--c-ink);
+  }
+
+  .cs-card__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .cs-card__media {
+    position: relative;
+    margin: 0.5rem 0.5rem 0;
+    border-radius: calc(var(--radius-lg) - 0.5rem);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+  }
+
+  .cs-card__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  .cs-card:hover .cs-card__media :global(img) {
+    transform: scale(1.05);
+  }
+
+  .cs-card__badge {
+    position: absolute;
+    left: 0.75rem;
+    bottom: 0.75rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: var(--radius-pill);
+    background: var(--c-ink);
+    color: var(--c-lime);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+  }
+
+  .cs-card__body {
+    position: relative;
+    display: grid;
+    gap: 0.35rem;
+    padding: var(--space-lg);
+    padding-right: 4.5rem;
+    flex: 1;
+  }
+
+  .cs-card__location {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  .cs-card__title {
+    font-size: var(--fs-xl);
+  }
+
+  .cs-card__metric {
+    font-size: var(--fs-sm);
+  }
+
+  .cs-card__metric strong {
+    font-family: var(--font-display);
+    font-size: var(--fs-lg);
+  }
+
+  .cs-card__arrow {
+    position: absolute;
+    right: var(--space-lg);
+    bottom: var(--space-lg);
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--c-ink);
+    color: var(--c-lime);
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .cs-card:hover .cs-card__arrow {
+    transform: rotate(45deg);
+  }
+</style>
